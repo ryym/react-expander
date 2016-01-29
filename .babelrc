@@ -1,0 +1,15 @@
+{
+  "presets": [
+    "es2015",
+    "react"
+  ],
+  "plugins": [
+    "espower",
+    [
+      "module-alias", [
+        { "src": "./lib", "expose": "$lib" }
+      ]
+    ]
+  ],
+  "ignore": "./lib/*.js"
+}
