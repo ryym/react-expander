@@ -1,5 +1,9 @@
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import {
+  renderIntoDocument,
+  findRenderedComponentWithType as findWithType,
+  findRenderedDOMComponentWithClass as findWithClassName
+} from 'react-addons-test-utils';
 import assert from 'power-assert';
 import beExpandable from '$lib/beExpandable';
 
@@ -21,7 +25,7 @@ describe('beExpandable', function() {
     Wrappee, props, options = { width: 100, height: 100 }
   ) {
     const Expandable = beExpandable(Wrappee, options);
-    return TestUtils.renderIntoDocument(<Expandable {...props} />);
+    return renderIntoDocument(<Expandable {...props} />);
   }
 
   describe('options', () => {
@@ -45,7 +49,7 @@ describe('beExpandable', function() {
 
     it('renders a wrapped component', () => {
       const expandable = renderExpandable(Div, { expander });
-      const wrappee = TestUtils.findRenderedComponentWithType(expandable, Div);
+      const wrappee = findWithType(expandable, Div);
 
       assert(wrappee);
     });
@@ -53,7 +57,7 @@ describe('beExpandable', function() {
     it('gives width and height to wrapped component', () => {
       const sizes = { width: 100, height: 100 };
       const expandable = renderExpandable(Div, { expander }, sizes);
-      const div = TestUtils.findRenderedComponentWithType(expandable, Div);
+      const div = findWithType(expandable, Div);
       const { width, height } = div.props;
 
       assert.deepEqual({ width, height }, sizes);
@@ -69,20 +73,20 @@ describe('beExpandable', function() {
       };
       const sizes = { width: 100, height: 100 };
       const expandable = renderExpandable(Div, props, sizes);
-      const div = TestUtils.findRenderedComponentWithType(expandable, Div);
+      const div = findWithType(expandable, Div);
 
       assert.deepEqual(div.props, Object.assign(props, sizes));
     });
 
     it('passes its children to wrapped component', () => {
       const ExpandableDiv = beExpandable(Div, { width: 100, height: 100 });
-      const expandable = TestUtils.renderIntoDocument(
+      const expandable = renderIntoDocument(
         <ExpandableDiv expander={{}}>
           <div className="child-div"></div>
         </ExpandableDiv>
       );
 
-      const child = TestUtils.findRenderedDOMComponentWithClass(expandable, 'child-div');
+      const child = findWithClassName(expandable, 'child-div');
       assert(child);
     });
   });
