@@ -2,7 +2,8 @@ import React from 'react';
 import {
   renderIntoDocument,
   findRenderedComponentWithType as findWithType,
-  findRenderedDOMComponentWithClass as findWithClassName
+  findRenderedDOMComponentWithClass as findWithClassName,
+  scryRenderedDOMComponentsWithTag as scryWithTag
 } from 'react-addons-test-utils';
 import assert from 'power-assert';
 import beExpandable from '$lib/beExpandable';
@@ -45,7 +46,12 @@ describe('beExpandable', function() {
       });
     });
 
-    it('does not add external div');
+    it('does not add external div', () => {
+      const expandable = renderExpandable(Div, { expander });
+      const divs = scryWithTag(expandable, 'div');
+
+      assert.equal(divs.length, 1);
+    });
 
     it('renders a wrapped component', () => {
       const expandable = renderExpandable(Div, { expander });
