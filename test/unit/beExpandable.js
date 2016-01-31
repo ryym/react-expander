@@ -7,19 +7,7 @@ import {
 } from 'react-addons-test-utils';
 import assert from 'power-assert';
 import beExpandable from '$lib/beExpandable';
-
-/**
- * A simple div component for tests.
- */
-class Div extends React.Component {
-  render() {
-    return (
-      <div className="wrappee">
-        {this.props.children}
-      </div>
-    );
-  }
-}
+import Div from './Div';
 
 describe('beExpandable', function() {
   function renderExpandable(
