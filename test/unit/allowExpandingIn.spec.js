@@ -12,14 +12,14 @@ import Div from './Div'
 describe('allowExpandingIn', function() {
   function renderAllower(Container, props = {}) {
     const Allower = allowExpandingIn(Container);
-    return renderIntoDocument(<Allower {...props} />);
+    const allower = renderIntoDocument(<Allower {...props} />);
+    const container = findWithType(allower, Container);
+    return { allower, container };
   }
 
   it('renders a wrapped component', () => {
-    const allower = renderAllower(Div);
-    const div = findWithType(allower, Div);
-
-    assert(div);
+    const { allower, container } = renderAllower(Div);
+    assert(container);
   });
 
   it('passes all the given props to wrapped component', () => {
@@ -28,10 +28,9 @@ describe('allowExpandingIn', function() {
       bar: 100,
       callback: () => 1
     };
-    const allower = renderAllower(Div, props);
-    const div = findWithType(allower, Div);
+    const { allower, container } = renderAllower(Div, props);
+    const { foo, bar, callback } = container.props;
 
-    const { foo, bar, callback } = div.props;
     assert.deepEqual({ foo, bar, callback }, props);
   });
 
@@ -47,15 +46,13 @@ describe('allowExpandingIn', function() {
   });
 
   it('gives expandHandlers to wrapped component', () => {
-    const allower = renderAllower(Div);
-    const div = findWithType(allower, Div);
-    assert(div.props.expandHandlers);
+    const { allower, container } = renderAllower(Div);
+    assert(container.props.expandHandlers);
   });
 
   it('gives expander to wrapped component', () => {
-    const allower = renderAllower(Div);
-    const div = findWithType(allower, Div);
-    assert(div.props.expander);
+    const { allower, container } = renderAllower(Div);
+    assert(container.props.expander);
   });
 
   describe('expandHandlers', () => {
