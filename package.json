@@ -10,7 +10,7 @@
     "lint:test": "eslint --env mocha --env node test",
     "pretest": "npm run build",
     "test": "npm run lint && npm run test:unit",
-    "test:unit": "mocha test/unit/**/*.js",
+    "test:unit": "mocha test/unit/**/*.spec.js",
     "test:watch": "npm run test:unit -- --watch"
   },
   "keywords": [
