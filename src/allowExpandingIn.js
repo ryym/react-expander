@@ -14,11 +14,30 @@ export default function allowExpandingIn(ContainerComp) {
     },
 
     makeExpandHandlers() {
-      return {};
+      return {
+        isExpanding: this.isExpanding
+      };
     },
 
     makeExpander() {
-      return {};
+      return {
+        startResizing: this.startResizing
+      };
+    },
+
+    isExpanding() {
+      return !! this._resizedFrom;
+    },
+
+    startResizing(e, expander) {
+      const { width, height } = expander.getCurrentSizes();
+      this._resizedFrom = {
+        width,
+        height,
+        handleExpand: expander.handleExpand,
+        clientX: e.clientX,
+        clientY: e.clientY,
+      };
     }
   });
 }

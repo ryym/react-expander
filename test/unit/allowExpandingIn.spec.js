@@ -57,7 +57,18 @@ describe('allowExpandingIn', function() {
 
   describe('expandHandlers', () => {
     describe('#isExpanding()', () => {
-      it('returns true when called while resizing');
+      it('returns true when called while resizing', () => {
+        const mockConnector = {
+          getCurrentSizes() {
+            return { width: 100, height: 100 }
+          }
+        };
+        const { allower, container } = renderAllower(Div);
+        const { expandHandlers, expander } = container.props;
+        expander.startResizing({}, mockConnector);
+
+        assert.equal(expandHandlers.isExpanding(), true);
+      });
     });
 
     context('before resizing', () => {
