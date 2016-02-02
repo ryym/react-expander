@@ -11,6 +11,11 @@ export default function beExpandable(Component, options) {
     throw new Error('beExpandable: Please specify width and height');
   }
   return React.createClass({
+    getInitialState() {
+      const { width, height } = options;
+      return { width, height };
+    },
+
     render() {
       if (! this.props.expander) {
         throw new Error('beExpandable#render: Please set expander as a prop');
@@ -18,8 +23,8 @@ export default function beExpandable(Component, options) {
       return (
         <Component
           {...this.props}
-          width={options.width}
-          height={options.height}
+          width={this.state.width}
+          height={this.state.height}
         >
           {this.props.children}
           {this.renderExpander(options.expanderProps)}
@@ -28,7 +33,7 @@ export default function beExpandable(Component, options) {
     },
 
     renderExpander(props = {}) {
-      const connector = {};
+      const connector = this.makeConnector();
       return (
         <div
           onMouseDown={e => this.startResizing(e, connector)}
@@ -39,6 +44,16 @@ export default function beExpandable(Component, options) {
 
     startResizing(e, connector) {
       this.props.expander.startResizing(e, connector);
+    },
+
+    makeConnector() {
+      return {
+        handleExpand: this.updateSizes
+      };
+    },
+
+    updateSizes({ width, height }) {
+      this.setState({ width, height });
     }
   });
 }

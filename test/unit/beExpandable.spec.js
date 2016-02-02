@@ -153,10 +153,20 @@ describe('beExpandable', function() {
     it('passes a connector object to `startResizing` function');
   });
 
-  describe('#handleExpand()', () => {
-    it('handles resizing and update its state');
+  describe('#updateSizes()', () => {
+    const expander = {};
 
-    it('passes new witdh and height to wrapped component');
+    it('passes given width and height to wrapped component', () => {
+      const nextSizes = { width: 200, height: 200 };
+      const expandable = renderExpandable(Div, { expander }, {
+        width: 100, height: 100
+      });
+      const div = findWithType(expandable, Div);
+
+      expandable.updateSizes(nextSizes);
+      const { width, height } = div.props;
+      assert.deepEqual({ width, height }, nextSizes);
+    });
   });
 
   describe('#getCurrentSizes()', () => {
