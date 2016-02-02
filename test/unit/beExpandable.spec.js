@@ -1,9 +1,11 @@
 import React from 'react';
 import {
   renderIntoDocument,
+  findAllInRenderedTree,
   findRenderedComponentWithType as findWithType,
   findRenderedDOMComponentWithClass as findWithClassName,
-  scryRenderedDOMComponentsWithTag as scryWithTag
+  scryRenderedDOMComponentsWithTag as scryWithTag,
+  isDOMComponent
 } from 'react-addons-test-utils';
 import assert from 'power-assert';
 import beExpandable from '$lib/beExpandable';
@@ -34,11 +36,17 @@ describe('beExpandable', function() {
       });
     });
 
-    it('does not add external div', () => {
+    it('does not add external DOM element', () => {
+      const div = renderIntoDocument(<Div />);
       const expandable = renderExpandable(Div, { expander });
-      const divs = scryWithTag(expandable, 'div');
+      const elements = findAllInRenderedTree(
+        div, e => isDOMComponent(e)
+      );
+      const wrappedElements = findAllInRenderedTree(
+        expandable, e => isDOMComponent(e)
+      );
 
-      assert.equal(divs.length, 1);
+      assert.equal(elements.length, wrappedElements.length);
     });
 
     it('renders a wrapped component', () => {
