@@ -28,9 +28,17 @@ export default function beExpandable(Component, options) {
     },
 
     renderExpander(props = {}) {
+      const connector = {};
       return (
-        <div {...props} />
+        <div
+          onMouseDown={e => this.startResizing(e, connector)}
+          {...props}
+        />
       );
+    },
+
+    startResizing(e, connector) {
+      this.props.expander.startResizing(e, connector);
     }
   });
 }

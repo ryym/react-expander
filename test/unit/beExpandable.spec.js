@@ -130,7 +130,23 @@ describe('beExpandable', function() {
       assert(expanderProps.onClick.calledOnce);
     });
 
-    it('starts resizing on mouse down');
+    it('starts resizing on mouse down', () => {
+      const expander = {
+        startResizing: sinon.spy()
+      };
+      const expandable = renderExpandable(
+        Div, {
+          expander
+        }, {
+          width: 100, height: 100,
+          expanderProps: { className: 'expander' }
+        }
+      );
+      const _expander = findWithClassName(expandable, 'expander');
+
+      Simulate.mouseDown(_expander);
+      assert(expander.startResizing.calledOnce);
+    });
   });
 
   describe('conector', () => {
