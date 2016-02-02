@@ -170,7 +170,21 @@ describe('beExpandable', function() {
   });
 
   describe('#getCurrentSizes()', () => {
-    it('returns current witdh and height of wrapped component');
+    it('returns current witdh and height of wrapped component', () => {
+      const expandable = renderExpandable(Div, { expander: {} }, {
+        width: 100, height: 100
+      });
+      assert.deepEqual(
+        expandable.getCurrentSizes(),
+        { width: 100, height: 100 }
+      );
+
+      expandable.setState({ width: 200, height: 200 });
+      assert.deepEqual(
+        expandable.getCurrentSizes(),
+        { width: 200, height: 200 }
+      );
+    });
   });
 
 });

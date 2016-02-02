@@ -48,12 +48,18 @@ export default function beExpandable(Component, options) {
 
     makeConnector() {
       return {
-        handleExpand: this.updateSizes
+        handleExpand: this.updateSizes,
+        getCurrentSizes: this.getCurrentSizes
       };
     },
 
     updateSizes({ width, height }) {
       this.setState({ width, height });
+    },
+
+    getCurrentSizes() {
+      const { width, height } = this.state;
+      return { width, height };
     }
   });
 }
