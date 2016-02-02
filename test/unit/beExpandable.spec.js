@@ -13,20 +13,10 @@ import beExpandable from '$lib/beExpandable';
 import Div from './Div';
 
 describe('beExpandable', function() {
-  function renderExpandable(
-    Wrappee, props, options = { width: 100, height: 100 }
-  ) {
+  function renderExpandable(Wrappee, props, options) {
     const Expandable = beExpandable(Wrappee, options);
     return renderIntoDocument(<Expandable {...props} />);
   }
-
-  describe('options', () => {
-    it('requires width and height', () => {
-      assert.throws(() => {
-        beExpandable(<div />, {});
-      });
-    });
-  });
 
   describe('wrapping', () => {
     const expander = {};
@@ -59,33 +49,34 @@ describe('beExpandable', function() {
     });
 
     it('gives width and height to wrapped component', () => {
-      const sizes = { width: 100, height: 100 };
-      const expandable = renderExpandable(Div, { expander }, sizes);
+      const size = { width: 100, height: 100 };
+      const expandable = renderExpandable(Div, { expander, size });
       const div = findWithType(expandable, Div);
       const { width, height } = div.props;
 
-      assert.deepEqual({ width, height }, sizes);
+      assert.deepEqual({ width, height }, size);
     });
 
     it('passes all the given props to wrapped component', () => {
+      const size = { width: 100, height: 100 };
       const props = {
         expander,
+        size,
         foo: 'foo',
         bar: 'bar',
         style: { color: 'red', margin: 0 },
         onClick: e => { e.preventDefault(); }
       };
-      const sizes = { width: 100, height: 100 };
-      const expandable = renderExpandable(Div, props, sizes);
+      const expandable = renderExpandable(Div, props);
       const div = findWithType(expandable, Div);
 
       const divProps = Object.assign({}, div.props);
       delete divProps.children;
-      assert.deepEqual(divProps, Object.assign(props, sizes));
+      assert.deepEqual(divProps, Object.assign(props, size));
     });
 
     it('passes its children to wrapped component', () => {
-      const ExpandableDiv = beExpandable(Div, { width: 100, height: 100 });
+      const ExpandableDiv = beExpandable(Div);
       const expandable = renderIntoDocument(
         <ExpandableDiv expander={{}}>
           <div className="child-div"></div>
@@ -103,7 +94,6 @@ describe('beExpandable', function() {
     it('renders expander element', () => {
       const expandable = renderExpandable(
         Div, { expander }, {
-          width: 100, height: 100,
           expanderProps: { className: 'expander' }
         }
       );
@@ -119,7 +109,7 @@ describe('beExpandable', function() {
         onClick: sinon.spy()
       };
       const expandable = renderExpandable(
-        Div, { expander }, { width: 100, height: 100, expanderProps }
+        Div, { expander }, { expanderProps }
       );
       const _expander = expandable.refs.expander;
 
@@ -138,7 +128,6 @@ describe('beExpandable', function() {
         Div, {
           expander
         }, {
-          width: 100, height: 100,
           expanderProps: { className: 'expander' }
         }
       );
@@ -166,8 +155,9 @@ describe('beExpandable', function() {
 
     it('passes given width and height to wrapped component', () => {
       const nextSizes = { width: 200, height: 200 };
-      const expandable = renderExpandable(Div, { expander }, {
-        width: 100, height: 100
+      const expandable = renderExpandable(Div, {
+        expander,
+        size: { width: 100, height: 100 }
       });
       const div = findWithType(expandable, Div);
 
@@ -179,12 +169,13 @@ describe('beExpandable', function() {
 
   describe('#getCurrentSizes()', () => {
     it('returns current witdh and height of wrapped component', () => {
-      const expandable = renderExpandable(Div, { expander: {} }, {
-        width: 100, height: 100
+      const expandable = renderExpandable(Div, {
+        expander: {},
+        size: { width: 150, height: 150 }
       });
       assert.deepEqual(
         expandable.getCurrentSizes(),
-        { width: 100, height: 100 }
+        { width: 150, height: 150 }
       );
 
       expandable.setState({ width: 200, height: 200 });
