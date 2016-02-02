@@ -150,7 +150,15 @@ describe('beExpandable', function() {
   });
 
   describe('conector', () => {
-    it('passes a connector object to `startResizing` function');
+    it('has functions that are necessary to handle expanding', () => {
+      const expandable = renderExpandable(Div, { expander: {} });
+      const connector = expandable.makeConnector();
+
+      assert.deepEqual(
+        Object.keys(connector),
+        ['handleExpand', 'getCurrentSizes']
+      );
+    });
   });
 
   describe('#updateSizes()', () => {
