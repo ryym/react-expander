@@ -4,10 +4,11 @@ import {
   findAllInRenderedTree,
   findRenderedComponentWithType as findWithType,
   findRenderedDOMComponentWithClass as findWithClassName,
-  scryRenderedDOMComponentsWithTag as scryWithTag,
-  isDOMComponent
+  isDOMComponent,
+  Simulate
 } from 'react-addons-test-utils';
 import assert from 'power-assert';
+import sinon from 'sinon';
 import beExpandable from '$lib/beExpandable';
 import Div from './Div';
 
@@ -114,15 +115,19 @@ describe('beExpandable', function() {
     it('has a specified props', () => {
       const expanderProps = {
         className: 'expander',
-        foo: 'bar',
-        onClick: () => false
+        ref: 'expander',
+        onClick: sinon.spy()
       };
       const expandable = renderExpandable(
         Div, { expander }, { width: 100, height: 100, expanderProps }
       );
-      const _expander = findWithClassName(expandable, 'expander');
+      const _expander = expandable.refs.expander;
 
-      assert(_expander.props, expanderProps);
+      // NOTE: React warns if we access '.props' of DOM component directly.
+      assert(_expander.className, 'expander');
+
+      Simulate.click(_expander);
+      assert(expanderProps.onClick.calledOnce);
     });
 
     it('starts resizing on mouse down');
