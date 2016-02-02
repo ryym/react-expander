@@ -15,8 +15,7 @@ export default function allowExpandingIn(ContainerComp) {
           {...this.props}
           expandHandlers={this.makeExpandHandlers()}
           expander={this.makeExpander()}
-        >
-        </ContainerComp>
+        />
       );
     },
 
@@ -40,14 +39,14 @@ export default function allowExpandingIn(ContainerComp) {
       return !! this._resizedFrom;
     },
 
-    startResizing(e, expander) {
-      const { width, height } = expander.getCurrentSizes();
+    startResizing(e, connector) {
+      const { width, height } = connector.getCurrentSizes();
       this._resizedFrom = {
         width,
         height,
-        handleExpand: expander.handleExpand,
+        handleExpand: connector.handleExpand,
         clientX: e.clientX,
-        clientY: e.clientY,
+        clientY: e.clientY
       };
     },
 

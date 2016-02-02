@@ -2,13 +2,12 @@ import React from 'react';
 import {
   renderIntoDocument,
   findRenderedComponentWithType as findWithType,
-  findRenderedDOMComponentWithClass as findWithClassName,
-  scryRenderedDOMComponentsWithTag as scryWithTag
+  findRenderedDOMComponentWithClass as findWithClassName
 } from 'react-addons-test-utils';
 import assert from 'power-assert';
 import sinon from 'sinon';
 import allowExpandingIn from '$lib/allowExpandingIn';
-import Div from './Div'
+import Div from './Div';
 
 describe('allowExpandingIn', function() {
   function renderAllower(Container, props = {}) {
@@ -35,7 +34,7 @@ describe('allowExpandingIn', function() {
   }
 
   it('renders a wrapped component', () => {
-    const { allower, container } = renderAllower(Div);
+    const { container } = renderAllower(Div);
     assert(container);
   });
 
@@ -45,7 +44,7 @@ describe('allowExpandingIn', function() {
       bar: 100,
       callback: () => 1
     };
-    const { allower, container } = renderAllower(Div, props);
+    const { container } = renderAllower(Div, props);
     const { foo, bar, callback } = container.props;
 
     assert.deepEqual({ foo, bar, callback }, props);
@@ -63,12 +62,12 @@ describe('allowExpandingIn', function() {
   });
 
   it('gives expandHandlers to wrapped component', () => {
-    const { allower, container } = renderAllower(Div);
+    const { container } = renderAllower(Div);
     assert(container.props.expandHandlers);
   });
 
   it('gives expander to wrapped component', () => {
-    const { allower, container } = renderAllower(Div);
+    const { container } = renderAllower(Div);
     assert(container.props.expander);
   });
 
@@ -76,7 +75,7 @@ describe('allowExpandingIn', function() {
     describe('#isExpanding()', () => {
       it('returns true when called while resizing', () => {
         const connector = makeMockConnector();
-        const { allower, container } = renderAllower(Div);
+        const { container } = renderAllower(Div);
         const { expandHandlers, expander } = container.props;
         expander.startResizing({}, connector);
 
@@ -84,16 +83,7 @@ describe('allowExpandingIn', function() {
       });
     });
 
-    context('before resizing', () => {
-      describe('#onMouseMove()', () => {
-        it('does nothing');
-      });
-    });
-
     context('while resizing', () => {
-      beforeEach(() => {
-      });
-
       describe('#onMouseMove()', () => {
         function makeCursorPoints(...points) {
           return points.map(([x, y]) => {
@@ -105,7 +95,7 @@ describe('allowExpandingIn', function() {
           const connector = makeMockConnector({
             handleExpand: sinon.spy()
           });
-          const { allower, container } = renderAllower(Div);
+          const { container } = renderAllower(Div);
           const { expandHandlers, expander } = container.props;
           const cursorPoints = makeCursorPoints(
             [0, 0], [10, 10], [20, 20], [30, 30]
@@ -126,7 +116,7 @@ describe('allowExpandingIn', function() {
       describe('#onMouseUp()', () => {
         it('stops resizing', () => {
           const connector = makeMockConnector();
-          const { allower, container } = renderAllower(Div);
+          const { container } = renderAllower(Div);
           const { expandHandlers, expander } = container.props;
           expander.startResizing({}, connector);
           expandHandlers.onMouseUp({});
@@ -138,7 +128,7 @@ describe('allowExpandingIn', function() {
       describe('#onMouseLeave()', () => {
         it('stops resizing', () => {
           const connector = makeMockConnector();
-          const { allower, container } = renderAllower(Div);
+          const { container } = renderAllower(Div);
           const { expandHandlers, expander } = container.props;
           expander.startResizing({}, connector);
           expandHandlers.onMouseLeave({});
@@ -153,7 +143,7 @@ describe('allowExpandingIn', function() {
     describe('#startResizing()', () => {
       it('starts resizing', () => {
         const connector = makeMockConnector();
-        const { allower, container } = renderAllower(Div);
+        const { container } = renderAllower(Div);
         const { expandHandlers, expander } = container.props;
 
         assert(! expandHandlers.isExpanding());
