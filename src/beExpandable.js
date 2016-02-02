@@ -21,7 +21,15 @@ export default function beExpandable(Component, options) {
           width={options.width}
           height={options.height}
         >
+          {this.props.children}
+          {this.renderExpander(options.expanderProps)}
         </Component>
+      );
+    },
+
+    renderExpander(props = {}) {
+      return (
+        <div {...props} />
       );
     }
   });
