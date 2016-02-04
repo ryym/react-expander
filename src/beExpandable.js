@@ -3,31 +3,36 @@ import React from 'react';
 /**
  * Wrap the given component to make it expandable.
  * @param {React.Component} Component - The component to be wrapped.
- * @param {object} options - The options.
  * @return {React.Component} The wrapped component.
  */
-export default function beExpandable(Component, options) {
-  if (! (options.width && options.height)) {
-    throw new Error('beExpandable: Please specify width and height');
-  }
+export default function beExpandable(Component) {
   return React.createClass({
+    getDefaultProps() {
+      return {
+        size: { width: 100, height: 100 }
+      };
+    },
+
     getInitialState() {
-      const { width, height } = options;
+      const { width, height } = this.props.size;
       return { width, height };
     },
 
     render() {
-      if (! this.props.expander) {
-        throw new Error('beExpandable#render: Please set expander as a prop');
+      const props = this.props;
+
+      if (! props.expander) {
+        throw new Error('beExpandable: Please set expander as a prop');
       }
+
       return (
         <Component
-          {...this.props}
+          {...props}
           width={this.state.width}
           height={this.state.height}
         >
-          {this.props.children}
-          {this.renderExpander(options.expanderProps)}
+          {props.children}
+          {this.renderExpander(props.expanderProps)}
         </Component>
       );
     },
