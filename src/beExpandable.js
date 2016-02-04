@@ -3,10 +3,9 @@ import React from 'react';
 /**
  * Wrap the given component to make it expandable.
  * @param {React.Component} Component - The component to be wrapped.
- * @param {object} options - The options.
  * @return {React.Component} The wrapped component.
  */
-export default function beExpandable(Component, options = {}) {
+export default function beExpandable(Component) {
   return React.createClass({
     getDefaultProps() {
       return {

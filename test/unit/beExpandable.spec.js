@@ -13,8 +13,8 @@ import beExpandable from '$lib/beExpandable';
 import Div from './Div';
 
 describe('beExpandable', function() {
-  function renderExpandable(Wrappee, props, options) {
-    const Expandable = beExpandable(Wrappee, options);
+  function renderExpandable(Wrappee, props) {
+    const Expandable = beExpandable(Wrappee);
     return renderIntoDocument(<Expandable {...props} />);
   }
 
