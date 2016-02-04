@@ -33,7 +33,7 @@ export default function beExpandable(Component, options = {}) {
           height={this.state.height}
         >
           {props.children}
-          {this.renderExpander(options.expanderProps)}
+          {this.renderExpander(props.expanderProps)}
         </Component>
       );
     },

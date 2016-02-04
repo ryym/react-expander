@@ -92,11 +92,10 @@ describe('beExpandable', function() {
     const expander = {};
 
     it('renders expander element', () => {
-      const expandable = renderExpandable(
-        Div, { expander }, {
-          expanderProps: { className: 'expander' }
-        }
-      );
+      const expandable = renderExpandable(Div, {
+        expander,
+        expanderProps: { className: 'expander' }
+      });
       const _expander = findWithClassName(expandable, 'expander');
 
       assert(_expander);
@@ -108,9 +107,9 @@ describe('beExpandable', function() {
         ref: 'expander',
         onClick: sinon.spy()
       };
-      const expandable = renderExpandable(
-        Div, { expander }, { expanderProps }
-      );
+      const expandable = renderExpandable(Div, {
+        expander, expanderProps
+      });
       const _expander = expandable.refs.expander;
 
       // NOTE: React warns if we access '.props' of DOM component directly.
@@ -124,13 +123,10 @@ describe('beExpandable', function() {
       const expander = {
         startResizing: sinon.spy()
       };
-      const expandable = renderExpandable(
-        Div, {
-          expander
-        }, {
-          expanderProps: { className: 'expander' }
-        }
-      );
+      const expandable = renderExpandable(Div, {
+        expander,
+        expanderProps: { className: 'expander' }
+      });
       const _expander = findWithClassName(expandable, 'expander');
 
       Simulate.mouseDown(_expander);
