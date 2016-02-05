@@ -85,31 +85,33 @@ describe('allowExpandingIn', function() {
 
     context('while resizing', () => {
       describe('#onMouseMove()', () => {
-        function makeCursorPoints(...points) {
-          return points.map(([x, y]) => {
-            return { clientX: x, clientY: y };
-          });
-        }
-
         it('emits new witdh and height to connector#handleExpand()', () => {
+          function asCursorPoint([x, y]) {
+            return { clientX: x, clientY: y };
+          }
           const connector = makeMockConnector({
             handleExpand: sinon.spy()
           });
           const { container } = renderAllower(Div);
           const { expandHandlers, expander } = container.props;
-          const cursorPoints = makeCursorPoints(
+          const points = [
             [0, 0], [10, 10], [20, 20], [30, 30]
-          );
+          ];
+          const width = 100;
+          const height = 100;
 
           expander.startResizing(
-            { clientX: 0, clientY: 0 },
+            { width, height, clientX: 0, clientY: 0 },
             connector
           );
-          cursorPoints.forEach(point => {
+          points.map(asCursorPoint).forEach(point => {
             expandHandlers.onMouseMove(asEventObject(point));
           });
 
-          assert.equal(connector.handleExpand.callCount, cursorPoints.length);
+          const expectedArgs = points.map(([x, y]) => {
+            return [{ width: width + x, height: height + y }];
+          });
+          assert.deepEqual(connector.handleExpand.args, expectedArgs);
         });
       });
 

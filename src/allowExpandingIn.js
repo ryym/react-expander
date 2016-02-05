@@ -66,7 +66,7 @@ export default function allowExpandingIn(ContainerComp) {
       width += (e.clientX - from.clientX);
       height += (e.clientY - from.clientY);
 
-      from.handleExpand(width, height);
+      from.handleExpand({ width, height });
     }
   });
 }
