@@ -68,7 +68,8 @@ function lintFiles(pattern, options) {
 // -------------------------------------------------------------
 
 gulp.task('default', [
-  'test:watch'
+  'test:watch',
+  'lint:watch'
 ]);
 
 gulp.task('build', () => {
@@ -145,6 +146,24 @@ gulp.task('lint:gulpfile', () => {
     rules: {
       'no-multi-spaces': 0,
       'no-console': 0
+    }
+  });
+});
+
+gulp.task('lint:watch', ['lint'], () => {
+  const files = [
+    `${PATH.src}/*.js`,
+    `${PATH.test}/**/*.js`
+  ];
+  const linter = new eslint.CLIEngine();
+  const formatter = linter.getFormatter();
+
+  gulp.watch(files, event => {
+    const report = linter.executeOnFiles([event.path]);
+    if (0 < report.errorCount || 0 < report.warningCount) {
+      console.log(formatter(report.results));
+    } else {
+      gutil.log(colors.cyan('eslint:'), 'Everything is OK');
     }
   });
 });
