@@ -59,7 +59,9 @@ function clearModuleCache(path) {
  * Run tests by mocha.
  * @param {string} pattern - The pattern of test files.
  * @param {Object} options - The options passed to mocha.
- * @return {Promise} Will be resolved if all the tests pass.
+ * @return {Promise} Will be resolved after running all tests.
+ *     The argument is an exit code. If any runtime errors occured,
+ *     this promise will be rejected.
  */
 function runTests(pattern, options) {
   const mocha = new Mocha(options);
@@ -69,7 +71,11 @@ function runTests(pattern, options) {
     mocha.addFile(file);
   });
   return new Promise((resolve, reject) => {
-    mocha.run(failed => failed ? reject() : resolve());
+    try {
+      mocha.run(resolve);
+    } catch(e) {
+      reject(e);
+    }
   });
 }
 
@@ -125,16 +131,20 @@ gulp.task('test:all', [
 
 gulp.task('test', ['build', 'test:prepare'], () => {
   return runTests(GLOB.spec)
-    .catch(() => process.exit(1));
+    .then(exitCode => process.exit(exitCode))
+    .catch(e => { throw e; });
 });
 
 gulp.task('test:watch', ['watch', 'test:prepare'], () => {
-  const files = [GLOB.test, GLOB.dest];
+  function test() {
+    runTests(GLOB.spec, { reporter: 'dot' })
+      .catch(e => console.log(e.stack));
+  }
 
-  runTests(GLOB.spec, { reporter: 'dot' });
-  gulp.watch(files, event => {
+  test();
+  gulp.watch([GLOB.test, GLOB.dest], event => {
     clearModuleCache(event.path);
-    runTests(GLOB.spec, { reporter: 'dot' });
+    test();
   });
 });
 
