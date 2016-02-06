@@ -8,14 +8,10 @@
     "src"
   ],
   "scripts": {
-    "build": "babel ./src --out-dir lib",
-    "watch": "babel ./src --out-dir lib --source-maps inline --watch",
-    "lint": "eslint src",
-    "lint:test": "eslint --env mocha --env node test",
-    "pretest": "npm run build",
-    "test": "npm run lint && npm run test:unit",
-    "test:unit": "mocha test/unit/**/*.spec.js",
-    "test:watch": "npm run test:unit -- --watch"
+    "build": "gulp build",
+    "start": "gulp",
+    "test": "gulp test:all",
+    "lint": "gulp lint:all"
   },
   "keywords": [
     "react"
@@ -36,6 +32,10 @@
     "babel-preset-react": "^6.3.13",
     "eslint": "^1.10.3",
     "eslint-plugin-react": "^3.16.1",
+    "glob": "^6.0.4",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-util": "^3.0.7",
     "jsdom": "^8.0.1",
     "mocha": "^2.4.5",
     "power-assert": "^1.2.0",
