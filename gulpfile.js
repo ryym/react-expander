@@ -10,8 +10,14 @@ const colors = gutil.colors;
 const PATH = {
   src: path.join(__dirname, 'src'),
   dest: path.join(__dirname, 'lib'),
-  test: path.join(__dirname, 'test'),
-  testFilePattern: './test/**/*.spec.js'
+  test: path.join(__dirname, 'test')
+};
+
+const GLOB = {
+  src: `${PATH.src}/*.js`,
+  test: `${PATH.test}/**/*.js`,
+  spec: `${PATH.test}/**/*.spec.js`,
+  dest: `${PATH.dest}/*.js`
 };
 
 const TEST_HELPERS = [
@@ -96,13 +102,13 @@ gulp.task('default', [
 ]);
 
 gulp.task('build', () => {
-  return gulp.src(`${PATH.src}/*.js`)
+  return gulp.src(GLOB.src)
     .pipe(babel())
     .pipe(gulp.dest(PATH.dest));
 });
 
 gulp.task('watch', ['build'], () => {
-  gulp.watch(`${PATH.src}/*.js`, event => {
+  gulp.watch(GLOB.src, event => {
     gutil.log(colors.cyan('babel:'), event.path);
     gulp.src(event.path)
       .pipe(babel())
@@ -118,20 +124,17 @@ gulp.task('test:all', [
 ]);
 
 gulp.task('test', ['build', 'test:prepare'], () => {
-  return runTests(PATH.testFilePattern)
+  return runTests(GLOB.spec)
     .catch(() => process.exit(1));
 });
 
 gulp.task('test:watch', ['watch', 'test:prepare'], () => {
-  const files = [
-    `${PATH.test}/**/*.js`,
-    `${PATH.dest}/*.js`
-  ];
+  const files = [GLOB.test, GLOB.dest];
 
-  runTests(PATH.testFilePattern, { reporter: 'dot' });
+  runTests(GLOB.spec, { reporter: 'dot' });
   gulp.watch(files, event => {
     clearModuleCache(event.path);
-    runTests(PATH.testFilePattern, { reporter: 'dot' });
+    runTests(GLOB.spec, { reporter: 'dot' });
   });
 });
 
@@ -151,11 +154,11 @@ gulp.task('lint', [
 ]);
 
 gulp.task('lint:src', () => {
-  lintFiles(`${PATH.src}/*.js`, LINT_CONF.src, true);
+  lintFiles(GLOB.src, LINT_CONF.src, true);
 });
 
 gulp.task('lint:test', () => {
-  lintFiles(`${PATH.test}/**/*.js`, LINT_CONF.test, true);
+  lintFiles(GLOB.test, LINT_CONF.test, true);
 });
 
 gulp.task('lint:gulpfile', () => {
@@ -177,13 +180,13 @@ gulp.task('lint:watch', () => {
     console.log(formatter(report.results));
   }
 
-  lintAndReport(`${PATH.src}/*.js`, linters.src);
-  lintAndReport(`${PATH.test}/**/*.js`, linters.test);
+  lintAndReport(GLOB.src, linters.src);
+  lintAndReport(GLOB.test, linters.test);
 
-  gulp.watch(`${PATH.src}/*.js`, event => {
+  gulp.watch(GLOB.src, event => {
     lintAndReport(event.path, linters.src);
   });
-  gulp.watch(`${PATH.test}/**/*.js`, event => {
+  gulp.watch(GLOB.test, event => {
     lintAndReport(event.path, linters.test);
   });
 });
