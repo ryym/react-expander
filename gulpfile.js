@@ -31,10 +31,11 @@ function clearModuleCache(path) {
 /**
  * Run tests by mocha.
  * @param {string} pattern - The pattern of test files.
+ * @param {Object} options - The options passed to mocha.
  * @return {Promise} Will be resolved if all the tests pass.
  */
-function runTests(pattern) {
-  const mocha = new Mocha();
+function runTests(pattern, options) {
+  const mocha = new Mocha(options);
   const files = glob.sync(pattern, { realpath: true });
   files.forEach(file => {
     clearModuleCache(file);  // For watching
@@ -100,14 +101,15 @@ gulp.task('test', ['build', 'test:prepare'], () => {
 });
 
 gulp.task('test:watch', ['watch', 'test:prepare'], () => {
-  runTests(PATH.testFilePattern);
   const files = [
     `${PATH.test}/**/*.js`,
     `${PATH.dest}/*.js`
   ];
+
+  runTests(PATH.testFilePattern, { reporter: 'dot' });
   gulp.watch(files, event => {
     clearModuleCache(event.path);
-    runTests(PATH.testFilePattern);
+    runTests(PATH.testFilePattern, { reporter: 'dot' });
   });
 });
 
