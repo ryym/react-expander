@@ -166,20 +166,24 @@ gulp.task('lint:eg', () => {
   lintFiles('./example/src', LINT_CONF.eg, true);
 });
 
-gulp.task('lint:watch', ['lint'], () => {
-  const files = [
-    `${PATH.src}/*.js`,
-    `${PATH.test}/**/*.js`
-  ];
-  const linter = new eslint.CLIEngine();
-  const formatter = linter.getFormatter();
+gulp.task('lint:watch', () => {
+  const linters = {
+    src: new eslint.CLIEngine(LINT_CONF.src),
+    test: new eslint.CLIEngine(LINT_CONF.test)
+  };
+  function lintAndReport(path, linter) {
+    const report = linter.executeOnFiles([path]);
+    const formatter = linter.getFormatter();
+    console.log(formatter(report.results));
+  }
 
-  gulp.watch(files, event => {
-    const report = linter.executeOnFiles([event.path]);
-    if (0 < report.errorCount || 0 < report.warningCount) {
-      console.log(formatter(report.results));
-    } else {
-      gutil.log(colors.cyan('eslint:'), 'Everything is OK');
-    }
+  lintAndReport(`${PATH.src}/*.js`, linters.src);
+  lintAndReport(`${PATH.test}/**/*.js`, linters.test);
+
+  gulp.watch(`${PATH.src}/*.js`, event => {
+    lintAndReport(event.path, linters.src);
+  });
+  gulp.watch(`${PATH.test}/**/*.js`, event => {
+    lintAndReport(event.path, linters.test);
   });
 });
