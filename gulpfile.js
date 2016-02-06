@@ -119,7 +119,8 @@ gulp.task('test:prepare', () => {
 
 gulp.task('lint:all', [
   'lint',
-  'lint:gulpfile'
+  'lint:gulpfile',
+  'lint:eg'
 ]);
 
 gulp.task('lint', [
@@ -149,6 +150,14 @@ gulp.task('lint:gulpfile', () => {
       'no-multi-spaces': 0,
       'no-console': 0
     }
+  });
+});
+
+gulp.task('lint:eg', () => {
+  lintFiles('./example/src/**/*.js', {
+    strict: true,
+    globals: ['require'],
+    envs: ['browser']
   });
 });
 
