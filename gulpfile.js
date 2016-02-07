@@ -143,7 +143,7 @@ gulp.task('test:watch', ['watch', 'test:prepare'], () => {
 
   test();
   gulp.watch([GLOB.test, GLOB.dest], event => {
-    clearModuleCache(event.path);
+    clearModuleCache(event.path);  // Need to refresh dest files.
     test();
   });
 });
