@@ -39,34 +39,22 @@ export default function allowExpandingIn(ContainerComp) {
       return !! this._resizedFrom;
     },
 
-    startResizing(e, connector) {
-      const { width, height } = connector.getCurrentSizes();
-      this._resizedFrom = {
-        width,
-        height,
-        handleExpand: connector.handleExpand,
-        clientX: e.clientX,
-        clientY: e.clientY
-      };
+    startResizing(connector) {
+      this._connector = connector;
     },
 
     stopResizing() {
-      this._resizedFrom = undefined;
+      this._connector.stopResizing();
+      this._connector = undefined;
     },
 
     expand(e) {
       e.preventDefault();
 
-      if (! this._resizedFrom) {
+      if (! this._connector) {
         return;
       }
-
-      const from = this._resizedFrom;
-      let { width, height } = from;
-      width += (e.clientX - from.clientX);
-      height += (e.clientY - from.clientY);
-
-      from.handleExpand({ width, height });
+      this._connector.expand(e);
     }
   });
 }

@@ -17,15 +17,6 @@ describe('allowExpandingIn', function() {
     return { allower, container };
   }
 
-  function makeMockConnector(overrides) {
-    return Object.assign({
-      getCurrentSizes() {
-        return { width: 100, height: 100 };
-      },
-      handleExpand() {}
-    }, overrides);
-  }
-
   function asEventObject(object) {
     return Object.assign({
       preventDefault() {},
@@ -72,87 +63,77 @@ describe('allowExpandingIn', function() {
   });
 
   describe('expandHandlers', () => {
-    describe('#isExpanding()', () => {
-      it('returns true when called while resizing', () => {
-        const connector = makeMockConnector();
-        const { container } = renderAllower(Div);
-        const { expandHandlers, expander } = container.props;
-        expander.startResizing({}, connector);
-
-        assert.equal(expandHandlers.isExpanding(), true);
-      });
-    });
-
     context('while resizing', () => {
       describe('#onMouseMove()', () => {
-        it('emits new witdh and height to connector#handleExpand()', () => {
-          function asCursorPoint([x, y]) {
-            return { clientX: x, clientY: y };
-          }
-          const connector = makeMockConnector({
-            handleExpand: sinon.spy()
-          });
-          const { container } = renderAllower(Div);
-          const { expandHandlers, expander } = container.props;
-          const points = [
-            [0, 0], [10, 10], [20, 20], [30, 30]
-          ];
-          const width = 100;
-          const height = 100;
+        it('calls this#expand()', () => {
+          const { allower, container } = renderAllower(Div);
+          const { expandHandlers } = container.props;
 
-          expander.startResizing(
-            { width, height, clientX: 0, clientY: 0 },
-            connector
-          );
-          points.map(asCursorPoint).forEach(point => {
-            expandHandlers.onMouseMove(asEventObject(point));
-          });
-
-          const expectedArgs = points.map(([x, y]) => {
-            return [{ width: width + x, height: height + y }];
-          });
-          assert.deepEqual(connector.handleExpand.args, expectedArgs);
+          allower.expand = sinon.spy();
+          expandHandlers.onMouseMove({});
+          assert(allower.expand.calledOnce);
         });
       });
 
       describe('#onMouseUp()', () => {
-        it('stops resizing', () => {
-          const connector = makeMockConnector();
-          const { container } = renderAllower(Div);
-          const { expandHandlers, expander } = container.props;
-          expander.startResizing({}, connector);
-          expandHandlers.onMouseUp({});
+        it('calls this#stopResizing()', () => {
+          const { allower, container } = renderAllower(Div);
+          const { expandHandlers } = container.props;
 
-          assert(! expandHandlers.isExpanding());
+          allower.stopResizing = sinon.spy();
+          expandHandlers.onMouseUp({});
+          assert(allower.stopResizing.calledOnce);
         });
       });
 
       describe('#onMouseLeave()', () => {
-        it('stops resizing', () => {
-          const connector = makeMockConnector();
-          const { container } = renderAllower(Div);
-          const { expandHandlers, expander } = container.props;
-          expander.startResizing({}, connector);
-          expandHandlers.onMouseLeave({});
+        it('calls this#stopResizing()', () => {
+          const { allower, container } = renderAllower(Div);
+          const { expandHandlers } = container.props;
 
-          assert(! expandHandlers.isExpanding());
+          allower.stopResizing = sinon.spy();
+          expandHandlers.onMouseLeave({});
+          assert(allower.stopResizing.calledOnce);
         });
       });
     });
   });
 
-  describe('connector', () => {
-    describe('#startResizing()', () => {
-      it('starts resizing', () => {
-        const connector = makeMockConnector();
-        const { container } = renderAllower(Div);
-        const { expandHandlers, expander } = container.props;
+  describe('#startResizing()', () => {
+    it('stores a given connector object', () => {
+      const { allower } = renderAllower(Div);
+      const connector = {};
+      allower.startResizing(connector);
+      assert.equal(allower._connector, connector);
+    });
+  });
 
-        assert(! expandHandlers.isExpanding());
+  describe('#stopResizing()', () => {
+    it('notifies connector that resizing finishes', () => {
+      const { allower } = renderAllower(Div);
+      const stopResizing = sinon.spy();
+      allower._connector = { stopResizing };
+      allower.stopResizing();
+      assert(stopResizing.calledOnce);
+    });
 
-        expander.startResizing({}, connector);
-        assert(expandHandlers.isExpanding());
-      });
+    it('clears stoerd connector object', () => {
+      const { allower } = renderAllower(Div);
+      allower._connector = { stopResizing: () => {} };
+      allower.stopResizing();
+      assert.equal(allower._connector, undefined);
+    });
+  });
+
+  describe('#expand()', () => {
+    it('calls connector#expand()', () => {
+      const { allower } = renderAllower(Div);
+      const expand = sinon.spy();
+      const event = asEventObject({ clientX: 100, clientY: 120 });
+
+      allower._connector = { expand };
+      allower.expand(event);
+      assert.deepEqual(expand.args[0], [event]);
     });
   });
 });
