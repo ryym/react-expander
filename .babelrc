@@ -5,6 +5,7 @@
   ],
   "plugins": [
     "espower",
+    "syntax-object-rest-spread",
     [
       "module-alias", [
         { "src": "./lib", "expose": "$lib" }
