@@ -19,7 +19,9 @@ export default function beExpandable(Component) {
     },
 
     render() {
-      const props = this.props;
+      const {
+        size, expanderProps, ...props
+      } = this.props;
 
       if (! props.expander) {
         throw new Error('beExpandable: Please set expander as a prop');
@@ -32,7 +34,7 @@ export default function beExpandable(Component) {
           height={this.state.height}
         >
           {props.children}
-          {this.renderExpander(props.expanderProps)}
+          {this.renderExpander(expanderProps)}
         </Component>
       );
     },

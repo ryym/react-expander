@@ -61,6 +61,7 @@ describe('beExpandable', function() {
       const size = { width: 100, height: 100 };
       const props = {
         expander,
+        expanderProps: { className: 'expander' },
         size,
         foo: 'foo',
         bar: 'bar',
@@ -70,9 +71,13 @@ describe('beExpandable', function() {
       const expandable = renderExpandable(Div, props);
       const div = findWithType(expandable, Div);
 
+      const expectedProps = Object.assign(props, size);
+      delete expectedProps.size;
+      delete expectedProps.expanderProps;
       const divProps = Object.assign({}, div.props);
       delete divProps.children;
-      assert.deepEqual(divProps, Object.assign(props, size));
+
+      assert.deepEqual(divProps, expectedProps);
     });
 
     it('passes its children to wrapped component', () => {
