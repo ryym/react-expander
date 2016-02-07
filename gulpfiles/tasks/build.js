@@ -10,17 +10,11 @@ gulp.task('build', () => {
 });
 
 gulp.task('watch', () => {
-  function transform(path) {
+  return $.runAndWatch($.GLOB.src, $.GLOB.src, path => {
+    gutil.log(gutil.colors.cyan('babel:'), path);
     return gulp.src(path)
       .pipe(babel())
       .on('error', e => console.log(e.stack))
       .pipe(gulp.dest($.PATH.dest));
-  }
-
-  gulp.watch($.GLOB.src, event => {
-    gutil.log(gutil.colors.cyan('babel:'), event.path);
-    transform(event.path);
   });
-
-  return transform($.GLOB.src);
 });

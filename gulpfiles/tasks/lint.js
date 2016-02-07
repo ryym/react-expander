@@ -81,13 +81,10 @@ gulp.task('lint:watch', () => {
     console.log(formatter(report.results));
   }
 
-  lintAndReport($.GLOB.src, linters.src);
-  lintAndReport($.GLOB.test, linters.test);
-
-  gulp.watch($.GLOB.src, event => {
-    lintAndReport(event.path, linters.src);
+  $.runAndWatch($.GLOB.src, $.GLOB.src, path => {
+    lintAndReport(path, linters.src);
   });
-  gulp.watch($.GLOB.test, event => {
-    lintAndReport(event.path, linters.test);
+  $.runAndWatch($.GLOB.test, $.GLOB.test, path => {
+    lintAndReport(path, linters.test);
   });
 });

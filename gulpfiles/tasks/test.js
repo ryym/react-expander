@@ -58,14 +58,10 @@ gulp.task('test', ['build', 'test:prepare'], () => {
 });
 
 gulp.task('test:watch', ['watch', 'test:prepare'], () => {
-  function test() {
+  const watchTargets = [$.GLOB.test, $.GLOB.dest];
+  $.runAndWatch(watchTargets, null, path => {
+    path && clearModuleCache(path);  // Need to refresh dest files.
     runTests($.GLOB.spec, { reporter: 'dot' })
       .catch(e => console.log(e.stack));
-  }
-
-  test();
-  gulp.watch([$.GLOB.test, $.GLOB.dest], event => {
-    clearModuleCache(event.path);  // Need to refresh dest files.
-    test();
   });
 });
