@@ -113,13 +113,18 @@ gulp.task('build', () => {
     .pipe(gulp.dest(PATH.dest));
 });
 
-gulp.task('watch', ['build'], () => {
-  gulp.watch(GLOB.src, event => {
-    gutil.log(colors.cyan('babel:'), event.path);
-    gulp.src(event.path)
+gulp.task('watch', () => {
+  function transform(path) {
+    gulp.src(path)
       .pipe(babel())
       .on('error', e => console.log(e.stack))
       .pipe(gulp.dest(PATH.dest));
+  }
+
+  transform(GLOB.src);
+  gulp.watch(GLOB.src, event => {
+    gutil.log(colors.cyan('babel:'), event.path);
+    transform(event.path);
   });
 });
 
