@@ -146,45 +146,71 @@ describe('beExpandable', function() {
 
       assert.deepEqual(
         Object.keys(connector),
-        ['handleExpand', 'getCurrentSizes']
+        ['expand', 'stopResizing']
       );
     });
   });
 
-  describe('#updateSizes()', () => {
-    const expander = {};
-
-    it('passes given width and height to wrapped component', () => {
-      const nextSizes = { width: 200, height: 200 };
+  describe('#startResizing()', () => {
+    it('stores starting state', () => {
+      const size = { width: 100, height: 100 };
       const expandable = renderExpandable(Div, {
-        expander,
-        size: { width: 100, height: 100 }
+        size, expander: { startResizing: () => {} }
       });
-      const div = findWithType(expandable, Div);
+      const cursorPosition = { clientX: 10, clientY: 20 };
 
-      expandable.updateSizes(nextSizes);
-      const { width, height } = div.props;
-      assert.deepEqual({ width, height }, nextSizes);
+      expandable.startResizing(cursorPosition);
+      assert.deepEqual(
+        expandable._resizedFrom,
+        Object.assign(size, cursorPosition)
+      );
     });
-  });
 
-  describe('#getCurrentSizes()', () => {
-    it('returns current witdh and height of wrapped component', () => {
+    it('notifies allower that resizing is start', () => {
+      const startResizing = sinon.spy();
       const expandable = renderExpandable(Div, {
-        expander: {},
-        size: { width: 150, height: 150 }
+        expander: { startResizing }
       });
-      assert.deepEqual(
-        expandable.getCurrentSizes(),
-        { width: 150, height: 150 }
-      );
 
-      expandable.setState({ width: 200, height: 200 });
-      assert.deepEqual(
-        expandable.getCurrentSizes(),
-        { width: 200, height: 200 }
-      );
+      expandable.startResizing({});
+      assert(startResizing.calledOnce);
     });
   });
 
+  describe('#stopResizing()', () => {
+    it('clears stored starting state', () => {
+      const expandable = renderExpandable(Div, { expander: {} });
+      expandable._resizedFrom = {};
+      expandable.stopResizing();
+      assert.equal(expandable._resizedFrom, undefined);
+    });
+  });
+
+  describe('#expand()', () => {
+    it('calculates new width and height and update state', () => {
+      function asCursorPoint([x, y]) {
+        return { clientX: x, clientY: y };
+      }
+      const points = [
+        [0, 0], [10, 10], [20, 20], [30, 30]
+      ];
+      const width = 100;
+      const height = 100;
+      const expandable = renderExpandable(Div, { expander: {} });
+
+      expandable._resizedFrom = {
+        width, height, clientX: 0, clientY: 0
+      };
+      expandable.setState = sinon.spy();
+
+      points.forEach(point => {
+        expandable.expand(asCursorPoint(point));
+      });
+
+      const expectedArgs = points.map(([x, y]) => {
+        return [{ width: width + x, height: height + y }];
+      });
+      assert.deepEqual(expandable.setState.args, expectedArgs);
+    });
+  });
 });

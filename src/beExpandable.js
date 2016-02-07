@@ -50,23 +50,34 @@ export default function beExpandable(Component) {
     },
 
     startResizing(e, connector) {
-      this.props.expander.startResizing(e, connector);
+      const { width, height } = this.state;
+      this._resizedFrom = {
+        width,
+        height,
+        clientX: e.clientX,
+        clientY: e.clientY
+      };
+      this.props.expander.startResizing(connector);
+    },
+
+    stopResizing() {
+      this._resizedFrom = undefined;
+    },
+
+    expand(e) {
+      const from = this._resizedFrom;
+      let { width, height } = from;
+      width += (e.clientX - from.clientX);
+      height += (e.clientY - from.clientY);
+
+      this.setState({ width, height });
     },
 
     makeConnector() {
       return {
-        handleExpand: this.updateSizes,
-        getCurrentSizes: this.getCurrentSizes
+        expand: this.expand,
+        stopResizing: this.stopResizing
       };
-    },
-
-    updateSizes({ width, height }) {
-      this.setState({ width, height });
-    },
-
-    getCurrentSizes() {
-      const { width, height } = this.state;
-      return { width, height };
     }
   });
 }
