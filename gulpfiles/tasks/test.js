@@ -39,19 +39,18 @@ function runTests(pattern, options) {
 
 gulp.task('test:all', [
   'lint:all',
-  'test:prepare',
-  'test'
+  'test:dest'
 ]);
 
-gulp.task('test:prepare', () => {
-  const testHelpers = [
-    'babel-core/register',
-    `${$.root}/test/mocha-env`
-  ];
-  testHelpers.forEach(path => require(path));
+// Test pre-transpiled sources directly.
+gulp.task('test', ['test:prepare'], () => {
+  return runTests($.GLOB.spec)
+    .then(exitCode => process.exit(exitCode))
+    .catch(e => { throw e; });
 });
 
-gulp.task('test', ['test:prepare'], () => {
+// Test transpiled sources.
+gulp.task('test:dest', ['build', 'test:prepare:dest'], () => {
   return runTests($.GLOB.spec)
     .then(exitCode => process.exit(exitCode))
     .catch(e => { throw e; });
@@ -69,3 +68,36 @@ gulp.task('test:watch', ['test:prepare'], () => {
   });
   $.runAndWatch($.GLOB.test, null, () => test());
 });
+
+gulp.task('test:prepare', () => {
+  registerBabelHook({
+    plugins: [
+      moduleAliasPlugin({ '$src': $.PATH.src })
+    ]
+  });
+  loadTestHelpers();
+});
+
+gulp.task('test:prepare:dest', () => {
+  registerBabelHook({
+    plugins: [
+      moduleAliasPlugin({ '$src': $.PATH.dest })
+    ]
+  });
+  loadTestHelpers();
+});
+
+function loadTestHelpers() {
+  require(`${$.root}/test/mocha-env`);
+}
+
+function registerBabelHook(options) {
+  require('babel-core/register')(options || {});
+}
+
+function moduleAliasPlugin(modules) {
+  const options = Object.keys(modules).map(alias => {
+    return { src: modules[alias], expose: alias };
+  });
+  return ['module-alias', options];
+}
