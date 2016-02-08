@@ -2,7 +2,7 @@ import assert from 'power-assert';
 import {
   allowExpandingIn,
   beExpandable
-} from '$lib';
+} from '$src';
 
 describe('index file', function() {
   it('exports allowExpandingIn', () => {

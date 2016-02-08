@@ -6,7 +6,7 @@ import {
 } from 'react-addons-test-utils';
 import assert from 'power-assert';
 import sinon from 'sinon';
-import allowExpandingIn from '$lib/allowExpandingIn';
+import allowExpandingIn from '$src/allowExpandingIn';
 import Div from './Div';
 
 describe('allowExpandingIn', function() {

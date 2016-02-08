@@ -51,17 +51,21 @@ gulp.task('test:prepare', () => {
   testHelpers.forEach(path => require(path));
 });
 
-gulp.task('test', ['build', 'test:prepare'], () => {
+gulp.task('test', ['test:prepare'], () => {
   return runTests($.GLOB.spec)
     .then(exitCode => process.exit(exitCode))
     .catch(e => { throw e; });
 });
 
-gulp.task('test:watch', ['watch', 'test:prepare'], () => {
-  const watchTargets = [$.GLOB.test, $.GLOB.dest];
-  $.runAndWatch(watchTargets, null, path => {
-    path && clearModuleCache(path);  // Need to refresh dest files.
+gulp.task('test:watch', ['test:prepare'], () => {
+  function test() {
     runTests($.GLOB.spec, { reporter: 'dot' })
       .catch(e => console.log(e.stack));
+  }
+
+  gulp.watch($.GLOB.src, event => {
+    clearModuleCache(event.path);
+    test();
   });
+  $.runAndWatch($.GLOB.test, null, () => test());
 });

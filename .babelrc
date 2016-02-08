@@ -8,7 +8,7 @@
     "syntax-object-rest-spread",
     [
       "module-alias", [
-        { "src": "./lib", "expose": "$lib" }
+        { "src": "./src", "expose": "$src" }
       ]
     ]
   ],
