@@ -17,95 +17,90 @@ describe('beExpandable', function() {
     const Expandable = beExpandable(Wrappee);
     return renderIntoDocument(<Expandable {...props} />);
   }
+  const expander = {};
 
-  describe('wrapping', () => {
-    const expander = {};
-
-    it('requires expander as a prop', () => {
-      assert.throws(() => {
-        renderExpandable(Div, {});
-      });
-    });
-
-    it('does not add external DOM element', () => {
-      const div = renderIntoDocument(<Div />);
-      const expandable = renderExpandable(Div, { expander });
-      const elements = findAllInRenderedTree(
-        div, e => isDOMComponent(e)
-      );
-      const wrappedElements = findAllInRenderedTree(
-        expandable, e => isDOMComponent(e)
-      );
-
-      const nExpander = 1;
-      assert.equal(elements.length + nExpander, wrappedElements.length);
-    });
-
-    it('renders a wrapped component', () => {
-      const expandable = renderExpandable(Div, { expander });
-      const wrappee = findWithType(expandable, Div);
-
-      assert(wrappee);
-    });
-
-    it('gives width and height to the wrapped component', () => {
-      const size = { width: 100, height: 100 };
-      const expandable = renderExpandable(Div, { expander, size });
-      const div = findWithType(expandable, Div);
-      const { width, height } = div.props;
-
-      assert.deepEqual({ width, height }, size);
-    });
-
-    it('passes all the given props to the wrapped component', () => {
-      const size = { width: 100, height: 100 };
-      const props = {
-        expander,
-        expanderProps: { className: 'expander' },
-        size,
-        foo: 'foo',
-        bar: 'bar',
-        style: { color: 'red', margin: 0 },
-        onClick: e => { e.preventDefault(); }
-      };
-      const expandable = renderExpandable(Div, props);
-      const div = findWithType(expandable, Div);
-
-      const expectedProps = Object.assign(props, size);
-      delete expectedProps.size;
-      delete expectedProps.expanderProps;
-      const divProps = Object.assign({}, div.props);
-      delete divProps.children;
-
-      assert.deepEqual(divProps, expectedProps);
-    });
-
-    it('passes its children to the wrapped component', () => {
-      const ExpandableDiv = beExpandable(Div);
-      const expandable = renderIntoDocument(
-        <ExpandableDiv expander={{}}>
-          <div className="child-div"></div>
-        </ExpandableDiv>
-      );
-
-      const child = findWithClassName(expandable, 'child-div');
-      assert(child);
+  it('requires expander as a prop', () => {
+    assert.throws(() => {
+      renderExpandable(Div, {});
     });
   });
 
-  describe('expander element', () => {
-    const expander = {};
+  it('does not add external DOM element', () => {
+    const div = renderIntoDocument(<Div />);
+    const expandable = renderExpandable(Div, { expander });
+    const elements = findAllInRenderedTree(
+      div, e => isDOMComponent(e)
+    );
+    const wrappedElements = findAllInRenderedTree(
+      expandable, e => isDOMComponent(e)
+    );
 
-    it('renders expander element', () => {
-      const expandable = renderExpandable(Div, {
-        expander,
-        expanderProps: { className: 'expander' }
-      });
-      const _expander = findWithClassName(expandable, 'expander');
+    const nExpander = 1;
+    assert.equal(elements.length + nExpander, wrappedElements.length);
+  });
 
-      assert(_expander);
+  it('renders a wrapped component', () => {
+    const expandable = renderExpandable(Div, { expander });
+    const wrappee = findWithType(expandable, Div);
+
+    assert(wrappee);
+  });
+
+  it('gives width and height to the wrapped component', () => {
+    const size = { width: 100, height: 100 };
+    const expandable = renderExpandable(Div, { expander, size });
+    const div = findWithType(expandable, Div);
+    const { width, height } = div.props;
+
+    assert.deepEqual({ width, height }, size);
+  });
+
+  it('passes all the given props to the wrapped component', () => {
+    const size = { width: 100, height: 100 };
+    const props = {
+      expander,
+      expanderProps: { className: 'expander' },
+      size,
+      foo: 'foo',
+      bar: 'bar',
+      style: { color: 'red', margin: 0 },
+      onClick: e => { e.preventDefault(); }
+    };
+    const expandable = renderExpandable(Div, props);
+    const div = findWithType(expandable, Div);
+
+    const expectedProps = Object.assign(props, size);
+    delete expectedProps.size;
+    delete expectedProps.expanderProps;
+    const divProps = Object.assign({}, div.props);
+    delete divProps.children;
+
+    assert.deepEqual(divProps, expectedProps);
+  });
+
+  it('passes its children to the wrapped component', () => {
+    const ExpandableDiv = beExpandable(Div);
+    const expandable = renderIntoDocument(
+      <ExpandableDiv expander={{}}>
+        <div className="child-div"></div>
+      </ExpandableDiv>
+    );
+
+    const child = findWithClassName(expandable, 'child-div');
+    assert(child);
+  });
+
+  it('renders expander element', () => {
+    const expandable = renderExpandable(Div, {
+      expander,
+      expanderProps: { className: 'expander' }
     });
+    const _expander = findWithClassName(expandable, 'expander');
 
+    assert(_expander);
+  });
+
+  describe('expander element', () => {
     it('has a specified props', () => {
       const expanderProps = {
         className: 'expander',
