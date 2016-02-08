@@ -29,7 +29,7 @@ describe('allowExpandingIn', function() {
     assert(container);
   });
 
-  it('passes all the given props to wrapped component', () => {
+  it('passes all the given props to the wrapped component', () => {
     const props = {
       foo: 'foo',
       bar: 100,
@@ -41,7 +41,7 @@ describe('allowExpandingIn', function() {
     assert.deepEqual({ foo, bar, callback }, props);
   });
 
-  it('passes its children to wrapped component', () => {
+  it('passes its children to the wrapped component', () => {
     const Allower = allowExpandingIn(Div);
     const allower = renderIntoDocument(
       <Allower>
@@ -52,12 +52,12 @@ describe('allowExpandingIn', function() {
     assert(child);
   });
 
-  it('gives expandHandlers to wrapped component', () => {
+  it('gives expandHandlers to the wrapped component', () => {
     const { container } = renderAllower(Div);
     assert(container.props.expandHandlers);
   });
 
-  it('gives expander to wrapped component', () => {
+  it('gives expander to the wrapped component', () => {
     const { container } = renderAllower(Div);
     assert(container.props.expander);
   });
@@ -109,7 +109,7 @@ describe('allowExpandingIn', function() {
   });
 
   describe('#stopResizing()', () => {
-    it('notifies connector that resizing finishes', () => {
+    it('notifies connector that resizing finished', () => {
       const { allower } = renderAllower(Div);
       const stopResizing = sinon.spy();
       allower._connector = { stopResizing };
@@ -117,7 +117,7 @@ describe('allowExpandingIn', function() {
       assert(stopResizing.calledOnce);
     });
 
-    it('clears stoerd connector object', () => {
+    it('clears a stored connector object', () => {
       const { allower } = renderAllower(Div);
       allower._connector = { stopResizing: () => {} };
       allower.stopResizing();

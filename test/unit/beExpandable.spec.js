@@ -48,7 +48,7 @@ describe('beExpandable', function() {
       assert(wrappee);
     });
 
-    it('gives width and height to wrapped component', () => {
+    it('gives width and height to the wrapped component', () => {
       const size = { width: 100, height: 100 };
       const expandable = renderExpandable(Div, { expander, size });
       const div = findWithType(expandable, Div);
@@ -57,7 +57,7 @@ describe('beExpandable', function() {
       assert.deepEqual({ width, height }, size);
     });
 
-    it('passes all the given props to wrapped component', () => {
+    it('passes all the given props to the wrapped component', () => {
       const size = { width: 100, height: 100 };
       const props = {
         expander,
@@ -80,7 +80,7 @@ describe('beExpandable', function() {
       assert.deepEqual(divProps, expectedProps);
     });
 
-    it('passes its children to wrapped component', () => {
+    it('passes its children to the wrapped component', () => {
       const ExpandableDiv = beExpandable(Div);
       const expandable = renderIntoDocument(
         <ExpandableDiv expander={{}}>
@@ -139,7 +139,7 @@ describe('beExpandable', function() {
     });
   });
 
-  describe('conector', () => {
+  describe('connector', () => {
     it('has functions that are necessary to handle expanding', () => {
       const expandable = renderExpandable(Div, { expander: {} });
       const connector = expandable.makeConnector();
@@ -166,7 +166,7 @@ describe('beExpandable', function() {
       );
     });
 
-    it('notifies allower that resizing is start', () => {
+    it('notifies allower that resizing started', () => {
       const startResizing = sinon.spy();
       const expandable = renderExpandable(Div, {
         expander: { startResizing }
@@ -178,7 +178,7 @@ describe('beExpandable', function() {
   });
 
   describe('#stopResizing()', () => {
-    it('clears stored starting state', () => {
+    it('clears a stored starting state', () => {
       const expandable = renderExpandable(Div, { expander: {} });
       expandable._resizedFrom = {};
       expandable.stopResizing();
