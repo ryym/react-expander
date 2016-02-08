@@ -47,8 +47,10 @@ export default function allowExpandingIn(ContainerComp) {
     },
 
     stopResizing() {
-      this._connector.stopResizing();
-      this._connector = undefined;
+      if (this._connector) {
+        this._connector.stopResizing();
+        this._connector = undefined;
+      }
     },
 
     expand(e) {
