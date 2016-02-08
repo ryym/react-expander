@@ -39,29 +39,65 @@ function runTests(pattern, options) {
 
 gulp.task('test:all', [
   'lint:all',
-  'test:prepare',
-  'test'
+  'test:dest'
 ]);
 
-gulp.task('test:prepare', () => {
-  const testHelpers = [
-    'babel-core/register',
-    `${$.root}/test/mocha-env`
-  ];
-  testHelpers.forEach(path => require(path));
-});
-
-gulp.task('test', ['build', 'test:prepare'], () => {
+// Test pre-transpiled sources directly.
+gulp.task('test', ['test:prepare'], () => {
   return runTests($.GLOB.spec)
     .then(exitCode => process.exit(exitCode))
     .catch(e => { throw e; });
 });
 
-gulp.task('test:watch', ['watch', 'test:prepare'], () => {
-  const watchTargets = [$.GLOB.test, $.GLOB.dest];
-  $.runAndWatch(watchTargets, null, path => {
-    path && clearModuleCache(path);  // Need to refresh dest files.
+// Test transpiled sources.
+gulp.task('test:dest', ['build', 'test:prepare:dest'], () => {
+  return runTests($.GLOB.spec)
+    .then(exitCode => process.exit(exitCode))
+    .catch(e => { throw e; });
+});
+
+gulp.task('test:watch', ['test:prepare'], () => {
+  function test() {
     runTests($.GLOB.spec, { reporter: 'dot' })
       .catch(e => console.log(e.stack));
+  }
+
+  gulp.watch($.GLOB.src, event => {
+    clearModuleCache(event.path);
+    test();
   });
+  $.runAndWatch($.GLOB.test, null, () => test());
 });
+
+gulp.task('test:prepare', () => {
+  registerBabelHook({
+    plugins: [
+      moduleAliasPlugin({ '$src': $.PATH.src })
+    ]
+  });
+  loadTestHelpers();
+});
+
+gulp.task('test:prepare:dest', () => {
+  registerBabelHook({
+    plugins: [
+      moduleAliasPlugin({ '$src': $.PATH.dest })
+    ]
+  });
+  loadTestHelpers();
+});
+
+function loadTestHelpers() {
+  require(`${$.root}/test/mocha-env`);
+}
+
+function registerBabelHook(options) {
+  require('babel-core/register')(options || {});
+}
+
+function moduleAliasPlugin(modules) {
+  const options = Object.keys(modules).map(alias => {
+    return { src: modules[alias], expose: alias };
+  });
+  return ['module-alias', options];
+}

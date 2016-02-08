@@ -9,7 +9,7 @@ import {
 } from 'react-addons-test-utils';
 import assert from 'power-assert';
 import sinon from 'sinon';
-import beExpandable from '$lib/beExpandable';
+import beExpandable from '$src/beExpandable';
 import Div from './Div';
 
 describe('beExpandable', function() {
