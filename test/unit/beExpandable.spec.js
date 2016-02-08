@@ -17,7 +17,12 @@ describe('beExpandable', function() {
     const Expandable = beExpandable(Wrappee);
     return renderIntoDocument(<Expandable {...props} />);
   }
-  const expander = {};
+
+  function makeExpander(props, startResizing) {
+    return {
+      props, startResizing
+    };
+  }
 
   it('requires expander as a prop', () => {
     assert.throws(() => {
@@ -27,7 +32,7 @@ describe('beExpandable', function() {
 
   it('does not add external DOM element', () => {
     const div = renderIntoDocument(<Div />);
-    const expandable = renderExpandable(Div, { expander });
+    const expandable = renderExpandable(Div, { expander: {} });
     const elements = findAllInRenderedTree(
       div, e => isDOMComponent(e)
     );
@@ -40,7 +45,7 @@ describe('beExpandable', function() {
   });
 
   it('renders a wrapped component', () => {
-    const expandable = renderExpandable(Div, { expander });
+    const expandable = renderExpandable(Div, { expander: {} });
     const wrappee = findWithType(expandable, Div);
 
     assert(wrappee);
@@ -48,7 +53,7 @@ describe('beExpandable', function() {
 
   it('gives width and height to the wrapped component', () => {
     const size = { width: 100, height: 100 };
-    const expandable = renderExpandable(Div, { expander, size });
+    const expandable = renderExpandable(Div, { expander: {}, size });
     const div = findWithType(expandable, Div);
     const { width, height } = div.props;
 
@@ -57,9 +62,11 @@ describe('beExpandable', function() {
 
   it('passes all the given props to the wrapped component', () => {
     const size = { width: 100, height: 100 };
+    const expander = {
+      props: { className: 'expander' }
+    };
     const props = {
       expander,
-      expanderProps: { className: 'expander' },
       size,
       foo: 'foo',
       bar: 'bar',
@@ -71,7 +78,6 @@ describe('beExpandable', function() {
 
     const expectedProps = Object.assign(props, size);
     delete expectedProps.size;
-    delete expectedProps.expanderProps;
     const divProps = Object.assign({}, div.props);
     delete divProps.children;
 
@@ -91,10 +97,10 @@ describe('beExpandable', function() {
   });
 
   it('renders expander element', () => {
-    const expandable = renderExpandable(Div, {
-      expander,
-      expanderProps: { className: 'expander' }
+    const expander = makeExpander({
+      className: 'expander'
     });
+    const expandable = renderExpandable(Div, { expander });
     const _expander = findWithClassName(expandable, 'expander');
 
     assert(_expander);
@@ -102,31 +108,27 @@ describe('beExpandable', function() {
 
   describe('expander element', () => {
     it('has a specified props', () => {
-      const expanderProps = {
+      const onClick = sinon.spy();
+      const expander = makeExpander({
         className: 'expander',
         ref: 'expander',
-        onClick: sinon.spy()
-      };
-      const expandable = renderExpandable(Div, {
-        expander, expanderProps
+        onClick
       });
+      const expandable = renderExpandable(Div, { expander });
       const _expander = expandable.refs.expander;
 
       // NOTE: React warns if we access '.props' of DOM component directly.
       assert(_expander.className, 'expander');
 
       Simulate.click(_expander);
-      assert(expanderProps.onClick.calledOnce);
+      assert(onClick.calledOnce);
     });
 
     it('starts resizing on mouse down', () => {
-      const expander = {
-        startResizing: sinon.spy()
-      };
-      const expandable = renderExpandable(Div, {
-        expander,
-        expanderProps: { className: 'expander' }
-      });
+      const expander = makeExpander({
+        className: 'expander'
+      }, sinon.spy());
+      const expandable = renderExpandable(Div, { expander });
       const _expander = findWithClassName(expandable, 'expander');
 
       Simulate.mouseDown(_expander);

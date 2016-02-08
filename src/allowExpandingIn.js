@@ -30,9 +30,12 @@ export default function allowExpandingIn(ContainerComp) {
     },
 
     makeExpander() {
-      return {
-        startResizing: this.startResizing
-      };
+      function expander(props) {
+        expander.props = Object.assign({}, props);
+        return expander;
+      }
+      expander.startResizing = this.startResizing;
+      return expander;
     },
 
     isExpanding() {

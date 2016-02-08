@@ -62,6 +62,29 @@ describe('allowExpandingIn', function() {
     assert(container.props.expander);
   });
 
+  describe('expander', () => {
+    it('has functions to communicate with allower', () => {
+      const { allower } = renderAllower(Div);
+      const expander = allower.makeExpander();
+      assert.deepEqual(
+        Object.keys(expander),
+        ['startResizing']
+      );
+    });
+
+    it('can take props for expander element as an argument', () => {
+      const { allower } = renderAllower(Div);
+      const props = {
+        className: 'expander',
+        id: 123,
+        onClick: () => {}
+      };
+      let expander = allower.makeExpander();
+      expander = expander(props);
+      assert.deepEqual(expander.props, props);
+    });
+  });
+
   describe('expandHandlers', () => {
     context('while resizing', () => {
       describe('#onMouseMove()', () => {

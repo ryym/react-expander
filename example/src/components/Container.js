@@ -30,8 +30,9 @@ class Container extends React.Component {
     return (
       <ExpandableItem
         size={{ width, height }}
-        expander={expander}
-        expanderProps={{ className: 'expander' }}
+        expander={expander({
+          className: 'expander'
+        })}
       />
     );
   }

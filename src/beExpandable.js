@@ -20,7 +20,7 @@ export default function beExpandable(Component) {
 
     render() {
       const {
-        size, expanderProps, ...props
+        size, ...props
       } = this.props;
 
       if (! props.expander) {
@@ -34,7 +34,7 @@ export default function beExpandable(Component) {
           height={this.state.height}
         >
           {props.children}
-          {this.renderExpander(expanderProps)}
+          {this.renderExpander(props.expander.props)}
         </Component>
       );
     },
