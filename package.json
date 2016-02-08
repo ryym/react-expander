@@ -11,6 +11,7 @@
     "build": "gulp build",
     "start": "gulp",
     "test": "gulp test:all",
+    "test:unit": "nyc gulp test",
     "lint": "gulp lint:all"
   },
   "keywords": [
@@ -47,5 +48,12 @@
     "react-addons-test-utils": "^0.14.7",
     "react-dom": "^0.14.7",
     "sinon": "^1.17.3"
+  },
+  "nyc": {
+    "exclude": [
+      "gulpfile.js",
+      "gulpfiles/**/*",
+      "test/**/*"
+    ]
   }
 }
