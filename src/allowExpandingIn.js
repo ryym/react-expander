@@ -22,7 +22,6 @@ export default function allowExpandingIn(ContainerComp) {
     makeExpandHandlers() {
       const onStopEvent = e => this.stopResizing(e);
       return {
-        isExpanding: this.isExpanding,
         onMouseMove: e => this.expand(e),
         onMouseUp: onStopEvent,
         onMouseLeave: onStopEvent
@@ -36,10 +35,6 @@ export default function allowExpandingIn(ContainerComp) {
       }
       expander.startResizing = this.startResizing;
       return expander;
-    },
-
-    isExpanding() {
-      return !! this._resizedFrom;
     },
 
     startResizing(connector) {
