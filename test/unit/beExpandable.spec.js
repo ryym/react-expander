@@ -78,6 +78,7 @@ describe('beExpandable', function() {
 
     const expectedProps = Object.assign(props, size);
     delete expectedProps.size;
+    delete expectedProps.expander;
     const divProps = Object.assign({}, div.props);
     delete divProps.children;
 
