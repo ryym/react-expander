@@ -41,12 +41,26 @@ export default function beExpandable(Component) {
 
     renderExpander(props = {}) {
       const connector = this.makeConnector();
+      const style = props.noDefaultStyle ?
+        {} : this.makeDefaultExpanderStyle();
       return (
         <div
           onMouseDown={e => this.startResizing(e, connector)}
+          style={style}
           {...props}
         />
       );
+    },
+
+    makeDefaultExpanderStyle() {
+      return {
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+        width: '10px',
+        height: '10px',
+        cursor: 'move'
+      };
     },
 
     startResizing(e, connector) {

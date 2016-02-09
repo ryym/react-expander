@@ -108,6 +108,27 @@ describe('beExpandable', function() {
   });
 
   describe('expander element', () => {
+    context('by default', () => {
+      it('has default style', () => {
+        const expander = makeExpander({ ref: 'expander' });
+        const expandable = renderExpandable(Div, { expander });
+        const _expander = expandable.refs.expander;
+        assert(_expander.style);
+      });
+    });
+
+    context('when noDefaultStyle is set to true', () => {
+      it('does not have any default style', () => {
+        const expander = makeExpander({
+          ref: 'expander',
+          noDefaultStyle: true
+        });
+        const expandable = renderExpandable(Div, { expander });
+        const _expander = expandable.refs.expander;
+        assert(_expander.style.position === '');
+      });
+    });
+
     it('has a specified props', () => {
       const onClick = sinon.spy();
       const expander = makeExpander({
