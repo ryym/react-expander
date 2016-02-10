@@ -1,4 +1,5 @@
 import React from 'react';
+import { SizeMeasurer } from './SizeMeasurer';
 
 /**
  * Wrap the given component to make it expandable.
@@ -45,7 +46,9 @@ export default function beExpandable(Component) {
         {} : this.makeDefaultExpanderStyle();
       return (
         <div
-          onMouseDown={e => this.startResizing(e, connector)}
+          onMouseDown={
+            e => this.startResizing(e, props.expandTo, connector)
+          }
           style={style}
           {...props}
         />
@@ -63,27 +66,25 @@ export default function beExpandable(Component) {
       };
     },
 
-    startResizing(e, connector) {
+    startResizing(e, directions = 'bottom right', connector) {
       const { width, height } = this.state;
-      this._resizedFrom = {
+      this._measurer = new SizeMeasurer({
         width,
         height,
         clientX: e.clientX,
-        clientY: e.clientY
-      };
+        clientY: e.clientY,
+        directions
+      });
       this.props.expander.startResizing(connector);
     },
 
     stopResizing() {
-      this._resizedFrom = undefined;
+      this._measurer = undefined;
     },
 
     expand(e) {
-      const from = this._resizedFrom;
-      let { width, height } = from;
-      width += (e.clientX - from.clientX);
-      height += (e.clientY - from.clientY);
-
+      const width = this._measurer.measureWidth(e.clientX);
+      const height = this._measurer.measureHeight(e.clientY);
       this.setState({ width, height });
     },
 
@@ -92,6 +93,10 @@ export default function beExpandable(Component) {
         expand: this.expand,
         stopResizing: this.stopResizing
       };
+    },
+
+    isExpanding() {
+      return !! this._measurer;
     }
   });
 }
