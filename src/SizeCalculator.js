@@ -2,7 +2,7 @@
  * SizeCalculator calculates width and height
  * corresponding to the cursor positions.
  */
-export default class SizeCalculator {
+export class SizeCalculator {
   constructor({
     width, height, clientX, clientY
   }) {
@@ -18,3 +18,27 @@ export default class SizeCalculator {
     return { width, height };
   }
 }
+
+/**
+ * The object which has calculation methods
+ * of expanding.
+ */
+export const calculators = {
+  top(height, fromY, toY) {
+    return height + fromY - toY;
+  },
+
+  bottom(height, fromY, toY) {
+    return height + toY - fromY;
+  },
+
+  left(width, fromX, toX) {
+    return width + fromX - toX;
+  },
+
+  right(width, fromX, toX) {
+    return width + toX - fromX;
+  },
+
+  asIs: size => size
+};
