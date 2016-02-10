@@ -1,5 +1,5 @@
 import React from 'react';
-import { SizeMeasurer } from './SizeCalculator';
+import { SizeMeasurer } from './SizeMeasurer';
 
 /**
  * Wrap the given component to make it expandable.

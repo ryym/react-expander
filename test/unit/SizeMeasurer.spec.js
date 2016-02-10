@@ -2,7 +2,7 @@ import assert from 'power-assert';
 import {
   measures,
   normalizeDirections
-} from '$src/SizeCalculator';
+} from '$src/SizeMeasurer';
 
 /**
  * Execute parametarized test.
