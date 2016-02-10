@@ -179,7 +179,7 @@ describe('beExpandable', function() {
       const cursorPosition = { clientX: 10, clientY: 20 };
 
       expandable.startResizing(cursorPosition);
-      assert(expandable._sizeCalculator);
+      assert(expandable.isExpanding());
     });
 
     it('notifies allower that resizing started', () => {
@@ -195,10 +195,14 @@ describe('beExpandable', function() {
 
   describe('#stopResizing()', () => {
     it('clears a stored starting state', () => {
-      const expandable = renderExpandable(Div, { expander: {} });
-      expandable._sizeCalculator = {};
+      const expandable = renderExpandable(Div, {
+        expander: { startResizing: () => {} }
+      });
+      expandable.startResizing({});
+      assert(expandable.isExpanding());
+
       expandable.stopResizing();
-      assert.equal(expandable._sizeCalculator, undefined);
+      assert(! expandable.isExpanding());
     });
   });
 

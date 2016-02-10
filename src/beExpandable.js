@@ -94,6 +94,10 @@ export default function beExpandable(Component) {
         expand: this.expand,
         stopResizing: this.stopResizing
       };
+    },
+
+    isExpanding() {
+      return !! this._sizeCalculator;
     }
   });
 }
