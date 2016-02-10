@@ -11,7 +11,9 @@ module.exports = {
     /* For JS */
     "curly": 2,
     "dot-notation": 2,
-    "func-style": [2, "declaration"],
+    "func-style": [2, "declaration", {
+      "allowArrowFunctions": true
+    }],
     "indent": [2, 2],
     "key-spacing": [2, {
       "beforeColon": false,
