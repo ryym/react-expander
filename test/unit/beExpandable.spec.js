@@ -179,10 +179,7 @@ describe('beExpandable', function() {
       const cursorPosition = { clientX: 10, clientY: 20 };
 
       expandable.startResizing(cursorPosition);
-      assert.deepEqual(
-        expandable._resizedFrom,
-        Object.assign(size, cursorPosition)
-      );
+      assert(expandable._sizeCalculator);
     });
 
     it('notifies allower that resizing started', () => {
@@ -199,9 +196,9 @@ describe('beExpandable', function() {
   describe('#stopResizing()', () => {
     it('clears a stored starting state', () => {
       const expandable = renderExpandable(Div, { expander: {} });
-      expandable._resizedFrom = {};
+      expandable._sizeCalculator = {};
       expandable.stopResizing();
-      assert.equal(expandable._resizedFrom, undefined);
+      assert.equal(expandable._sizeCalculator, undefined);
     });
   });
 
@@ -215,13 +212,15 @@ describe('beExpandable', function() {
       ];
       const width = 100;
       const height = 100;
-      const expandable = renderExpandable(Div, { expander: {} });
+      const expandable = renderExpandable(Div, {
+        size: { width, height },
+        expander: { startResizing: () => {} }
+      });
 
-      expandable._resizedFrom = {
-        width, height, clientX: 0, clientY: 0
-      };
       expandable.setState = sinon.spy();
-
+      expandable.startResizing({
+        clientX: 0, clientY: 0
+      });
       points.forEach(point => {
         expandable.expand(asCursorPoint(point));
       });
