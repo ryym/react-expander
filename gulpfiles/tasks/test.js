@@ -62,8 +62,11 @@ gulp.task('test:watch', ['test:prepare'], () => {
       .catch(e => console.log(e.stack));
   }
 
-  gulp.watch($.GLOB.src, event => {
-    clearModuleCache(event.path);
+  const sourceFiles = glob.sync($.GLOB.src, { realpath: true });
+  gulp.watch($.GLOB.src, () => {
+    // Reload all source files.If we refresh only the changed file,
+    // the files required in it don't be refreshed.
+    sourceFiles.forEach(f => clearModuleCache(f));
     test();
   });
   $.runAndWatch($.GLOB.test, null, () => test());
