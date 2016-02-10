@@ -1,6 +1,6 @@
 import assert from 'power-assert';
 import {
-  calculators,
+  measures,
   normalizeDirections
 } from '$src/SizeCalculator';
 
@@ -18,7 +18,7 @@ function itEach(testName, params, testBody) {
   });
 }
 
-describe('calculators', () => {
+describe('measures', () => {
   function testEach(calculator, params) {
     itEach(
       param => `handles ${JSON.stringify(param[0])}`,
@@ -29,7 +29,7 @@ describe('calculators', () => {
   }
 
   describe('.top()', () => {
-    testEach(calculators.top, [
+    testEach(measures.top, [
       [[100, 30, 40], 90],
       [[100, 30, 10], 120],
       [[100, 20, 20], 100]
@@ -37,7 +37,7 @@ describe('calculators', () => {
   });
 
   describe('.bottom()', () => {
-    testEach(calculators.bottom, [
+    testEach(measures.bottom, [
       [[100, 30, 40], 110],
       [[100, 30, 10], 80],
       [[100, 20, 20], 100]
@@ -45,7 +45,7 @@ describe('calculators', () => {
   });
 
   describe('.left()', () => {
-    testEach(calculators.left, [
+    testEach(measures.left, [
       [[100, 30, 40], 90],
       [[100, 30, 10], 120],
       [[100, 20, 20], 100]
@@ -53,7 +53,7 @@ describe('calculators', () => {
   });
 
   describe('.right()', () => {
-    testEach(calculators.right, [
+    testEach(measures.right, [
       [[100, 30, 40], 110],
       [[100, 30, 10], 80],
       [[100, 20, 20], 100]
@@ -61,7 +61,7 @@ describe('calculators', () => {
   });
 
   describe('.asIs()', () => {
-    testEach(calculators.asIs, [
+    testEach(measures.asIs, [
       [[100], 100],
       [[200], 200]
     ]);

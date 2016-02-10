@@ -1,5 +1,5 @@
 import React from 'react';
-import { SizeCalculator } from './SizeCalculator';
+import { SizeMeasurer } from './SizeCalculator';
 
 /**
  * Wrap the given component to make it expandable.
@@ -68,7 +68,7 @@ export default function beExpandable(Component) {
 
     startResizing(e, directions = 'bottom right', connector) {
       const { width, height } = this.state;
-      this._sizeCalculator = new SizeCalculator({
+      this._measurer = new SizeMeasurer({
         width,
         height,
         clientX: e.clientX,
@@ -79,13 +79,12 @@ export default function beExpandable(Component) {
     },
 
     stopResizing() {
-      this._sizeCalculator = undefined;
+      this._measurer = undefined;
     },
 
     expand(e) {
-      const { width, height } = this._sizeCalculator.calcSizeWhen(
-        e.clientX, e.clientY
-      );
+      const width = this._measurer.measureWidth(e.clientX);
+      const height = this._measurer.measureHeight(e.clientY);
       this.setState({ width, height });
     },
 
@@ -97,7 +96,7 @@ export default function beExpandable(Component) {
     },
 
     isExpanding() {
-      return !! this._sizeCalculator;
+      return !! this._measurer;
     }
   });
 }

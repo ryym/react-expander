@@ -1,8 +1,8 @@
 /**
- * SizeCalculator calculates width and height
+ * SizeMeasurer calculates width and height
  * corresponding to the cursor positions.
  */
-export class SizeCalculator {
+export class SizeMeasurer {
   constructor({
     width, height, clientX, clientY,
     directions = 'bottom right'
@@ -11,18 +11,18 @@ export class SizeCalculator {
       width, height, clientX, clientY
     };
     const { dirX, dirY } = normalizeDirections(directions);
-    this._calcs = {
-      width: calculators[dirX],
-      height: calculators[dirY]
-    };
+    this._measureWidth = measures[dirX];
+    this._measureHeight = measures[dirY];
   }
 
-  calcSizeWhen(nextClientX, nextClientY) {
-    let { width, height, clientX, clientY } = this._start;
-    return {
-      width: this._calcs.width(width, clientX, nextClientX),
-      height: this._calcs.height(height, clientY, nextClientY)
-    };
+  measureWidth(nextClientX) {
+    const { width, clientX } = this._start;
+    return this._measureWidth(width, clientX, nextClientX);
+  }
+
+  measureHeight(nextClientY) {
+    const { height, clientY } = this._start;
+    return this._measureHeight(height, clientY, nextClientY);
   }
 }
 
@@ -30,7 +30,7 @@ export class SizeCalculator {
  * The object which has calculation methods
  * of expanding.
  */
-export const calculators = {
+export const measures = {
   top(height, fromY, toY) {
     return height + fromY - toY;
   },
@@ -52,7 +52,7 @@ export const calculators = {
 
 /**
  * Convert a string which specifies expanding directions
- * to a normalized object..
+ * to a normalized object.
  * @param {string} directions
  * @returns {Object}
  */
