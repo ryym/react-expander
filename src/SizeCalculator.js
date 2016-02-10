@@ -42,3 +42,32 @@ export const calculators = {
 
   asIs: size => size
 };
+
+/**
+ * Convert a string which specifies expanding directions
+ * to a normalized object..
+ * @param {string} directions
+ * @returns {Object}
+ */
+export function normalizeDirections(directions = '') {
+  const dirs = directions.split(/\s+/);
+
+  if (dirs.length === 1) {
+    const dir = dirs[0];
+    const dirY = isDirY(dir) ? dir : 'asIs';
+    const dirX = isDirX(dir) ? dir : 'asIs';
+    return { dirY, dirX };
+  }
+
+  const [d1, d2] = dirs;
+
+  if (isDirY(d1) && isDirY(d2) || isDirX(d1) && isDirX(d2)) {
+    throw new Error('Invalid directions are specified.');
+  }
+
+  const [dirY, dirX] = isDirY(d1) ? [d1, d2] : [d2, d1];
+  return { dirY, dirX };
+}
+
+const isDirY = dir => dir === 'top' || dir === 'bottom';
+const isDirX = dir => dir === 'left' || dir === 'right';

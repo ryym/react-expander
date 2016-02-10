@@ -1,6 +1,7 @@
 import assert from 'power-assert';
 import {
-  calculators
+  calculators,
+  normalizeDirections
 } from '$src/SizeCalculator';
 
 /**
@@ -64,5 +65,55 @@ describe('calculators', () => {
       [[100], 100],
       [[200], 200]
     ]);
+  });
+});
+
+describe('normalizeDirections()', () => {
+  itEach(
+    params => `handles ${JSON.stringify(params[0])}`,
+    [
+      [['top'], {
+        dirX: 'asIs', dirY: 'top'
+      }],
+      [['bottom'], {
+        dirX: 'asIs', dirY: 'bottom'
+      }],
+      [['left'], {
+        dirX: 'left', dirY: 'asIs'
+      }],
+      [['right'], {
+        dirX: 'right', dirY: 'asIs'
+      }],
+      [['top left'], {
+        dirX: 'left', dirY: 'top'
+      }],
+      [['bottom right'], {
+        dirX: 'right', dirY: 'bottom'
+      }],
+      [['left bottom'], {
+        dirX: 'left', dirY: 'bottom'
+      }],
+      [['left bottom right'], {
+        dirX: 'left', dirY: 'bottom'
+      }]
+    ],
+    ([directions], expected) => {
+      const actual = normalizeDirections(directions);
+      assert.deepEqual(actual, expected);
+    }
+  );
+
+  context('with invalid directions', () => {
+    itEach(
+      param => `throws an error for ${JSON.stringify(param)}`,
+      [
+        ['top bottom'],
+        ['top top'],
+        ['left right'],
+        ['right right']
+      ], arg => {
+        assert.throws(() => normalizeDirections(arg));
+      }
+    );
   });
 });
