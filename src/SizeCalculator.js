@@ -4,18 +4,25 @@
  */
 export class SizeCalculator {
   constructor({
-    width, height, clientX, clientY
+    width, height, clientX, clientY,
+    directions = 'bottom right'
   }) {
     this._start = {
       width, height, clientX, clientY
     };
+    const { dirX, dirY } = normalizeDirections(directions);
+    this._calcs = {
+      width: calculators[dirX],
+      height: calculators[dirY]
+    };
   }
 
-  calcSizeWhen(clientX, clientY) {
-    let { width, height } = this._start;
-    width += (clientX - this._start.clientX);
-    height += (clientY - this._start.clientY);
-    return { width, height };
+  calcSizeWhen(nextClientX, nextClientY) {
+    let { width, height, clientX, clientY } = this._start;
+    return {
+      width: this._calcs.width(width, clientX, nextClientX),
+      height: this._calcs.height(height, clientY, nextClientY)
+    };
   }
 }
 

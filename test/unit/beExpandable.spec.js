@@ -208,7 +208,7 @@ describe('beExpandable', function() {
         return { clientX: x, clientY: y };
       }
       const points = [
-        [0, 0], [10, 10], [20, 20], [30, 30]
+        [0, 0],[10, 10], [20, 20], [30, 30]
       ];
       const width = 100;
       const height = 100;

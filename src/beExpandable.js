@@ -46,7 +46,9 @@ export default function beExpandable(Component) {
         {} : this.makeDefaultExpanderStyle();
       return (
         <div
-          onMouseDown={e => this.startResizing(e, connector)}
+          onMouseDown={
+            e => this.startResizing(e, props.expandTo, connector)
+          }
           style={style}
           {...props}
         />
@@ -64,13 +66,14 @@ export default function beExpandable(Component) {
       };
     },
 
-    startResizing(e, connector) {
+    startResizing(e, directions = 'bottom right', connector) {
       const { width, height } = this.state;
       this._sizeCalculator = new SizeCalculator({
         width,
         height,
         clientX: e.clientX,
-        clientY: e.clientY
+        clientY: e.clientY,
+        directions
       });
       this.props.expander.startResizing(connector);
     },
