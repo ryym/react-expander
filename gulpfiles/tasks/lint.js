@@ -3,7 +3,9 @@ const eslint = require('eslint');
 const $      = require('./_shared');
 
 const LINT_CONF = {
-  src: {},
+  src: {
+    envs: ['node']
+  },
   test: {
     envs: ['node', 'mocha'],
     rules: {
