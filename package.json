@@ -45,6 +45,7 @@
     "istanbul": "^0.4.2",
     "jsdom": "^8.0.1",
     "mocha": "^2.4.5",
+    "mocha-each": "^1.0.1",
     "nyc": "^5.6.0",
     "power-assert": "^1.2.0",
     "react": "^0.14.7",
