@@ -4,6 +4,7 @@ import {
   findAllInRenderedTree,
   findRenderedComponentWithType as findWithType,
   findRenderedDOMComponentWithClass as findWithClassName,
+  scryRenderedDOMComponentsWithClass as scryWithClassName,
   isDOMComponent,
   Simulate
 } from 'react-addons-test-utils';
@@ -105,6 +106,26 @@ describe('beExpandable', function() {
     const _expander = findWithClassName(expandable, 'expander');
 
     assert(_expander);
+  });
+
+  context('when expanders are set', () => {
+    it('renders all expanders', () => {
+      const make = props => makeExpander(
+        Object.assign({ className: 'expander' }, props)
+      );
+      const expanders = [
+        make({ id: 'id1' }),
+        make({ id: 'id2' }),
+        make({ id: 'id3' })
+      ];
+      const expandable = renderExpandable(Div, { expanders });
+      const _expanders = scryWithClassName(expandable, 'expander');
+
+      assert.deepEqual(
+        _expanders.map(e => e.id),
+        ['id1', 'id2', 'id3']
+      );
+    });
   });
 
   describe('expander element', () => {
