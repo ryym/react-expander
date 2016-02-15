@@ -42,8 +42,8 @@ export default function beExpandable(Component) {
 
     renderExpander(props = {}) {
       const connector = this.makeConnector();
-      const style = props.noDefaultStyle ?
-        {} : this.makeDefaultExpanderStyle();
+      const style = props.defaultStyle ?
+        this.makeDefaultExpanderStyle() : [];
       return (
         <div
           onMouseDown={
