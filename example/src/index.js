@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Example from './components/Example';
+import Sample from './components/Sample';
 
-require('./styles.scss');
+require('./sample.scss');
 
 ReactDOM.render(
-  <Example />,
+  <Sample />,
   document.getElementById('main')
 );
