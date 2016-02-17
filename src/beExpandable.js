@@ -57,15 +57,16 @@ export default function beExpandable(Component) {
     renderExpanders() {
       const expanders = this.getExpanders();
       return this.normalizeExpanders(expanders)
-        .map(expander => this.renderExpander(expander.props));
+        .map(exp => this.renderExpander(exp.key, exp.props));
     },
 
-    renderExpander(props = {}) {
+    renderExpander(key, props = {}) {
       const connector = this.makeConnector();
       const style = props.defaultStyle ?
         this.makeDefaultExpanderStyle() : [];
       return (
         <div
+          key={key}
           onMouseDown={
             e => this.startResizing(e, props.expandTo, connector)
           }
