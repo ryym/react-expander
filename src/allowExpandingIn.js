@@ -9,6 +9,8 @@ import React from 'react';
  */
 export default function allowExpandingIn(ContainerComp) {
   return React.createClass({
+    _expanderId: 0,
+
     render() {
       return (
         <ContainerComp
@@ -32,6 +34,7 @@ export default function allowExpandingIn(ContainerComp) {
       return props => {
         return {
           props,
+          key: ++this._expanderId,
           startResizing: this.startResizing
         };
       };

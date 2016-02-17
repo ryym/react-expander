@@ -63,6 +63,13 @@ describe('allowExpandingIn', function() {
   });
 
   describe('expander', () => {
+    it('has an unique key', () => {
+      const { allower } = renderAllower(Div);
+      const e1 = allower.makeExpander()();
+      const e2 = allower.makeExpander()();
+      assert(e1.key !== e2.key);
+    });
+
     it('has functions to communicate with allower', () => {
       const { allower } = renderAllower(Div);
       const expander = allower.makeExpander();
