@@ -7,7 +7,8 @@ exports.root = root;
 const PATH = {
   src: path.join(root, 'src'),
   dest: path.join(root, 'lib'),
-  test: path.join(root, 'test')
+  test: path.join(root, 'test'),
+  eg: path.join(root, 'example')
 };
 exports.PATH = PATH;
 

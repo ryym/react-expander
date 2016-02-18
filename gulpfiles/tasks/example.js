@@ -1,5 +1,6 @@
 const gulp = require('gulp');
-const cp = require('child_process');
+const cp   = require('child_process');
+const $    = require('./_shared');
 
 /**
  * Change the current directory to
@@ -7,7 +8,7 @@ const cp = require('child_process');
  * @return {void}
  */
 function gotoExampleDir() {
-  process.chdir('./example');
+  process.chdir($.PATH.eg);
 }
 
 /**
