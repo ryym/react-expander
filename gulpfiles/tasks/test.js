@@ -37,11 +37,6 @@ function runTests(pattern, options) {
 }
 
 
-gulp.task('test:all', [
-  'lint:all',
-  'test:dest'
-]);
-
 // Test pre-transpiled sources directly.
 gulp.task('test', ['test:prepare'], () => {
   return runTests($.GLOB.spec)
