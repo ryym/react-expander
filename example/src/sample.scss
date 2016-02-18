@@ -56,41 +56,41 @@ a {
   margin-bottom: 10px;
   display: flex;
   align-items: center;
-}
 
-.header__left {
-  flex-grow: 3;
-  margin-left: 30px;
-}
-
-.header__right {
-  flex-grow: 1;
-  margin-right: 20px;
-  text-align: right;
-}
-
-.header__title {
-  color: $grey-white;
-  font-size: 20px;
-
-  .fa-fire {
-    margin-right: 10px;
-    color: #ef9f62;
+  &__left {
+    flex-grow: 3;
+    margin-left: 30px;
   }
-}
 
-.header__source {
-  width: 100px;
-  color: $grey-white;
-
-  &:hover {
-    color: white;
-    text-decoration: none;
+  &__right {
+    flex-grow: 1;
+    margin-right: 20px;
+    text-align: right;
   }
-}
 
-.header__source__icon {
-  margin-right: 5px;
+  &__title {
+    color: $grey-white;
+    font-size: 20px;
+
+    .fa-fire {
+      margin-right: 10px;
+      color: #ef9f62;
+    }
+  }
+
+  &__source {
+    width: 100px;
+    color: $grey-white;
+
+    &:hover {
+      color: white;
+      text-decoration: none;
+    }
+  }
+
+  &__source__icon {
+    margin-right: 5px;
+  }
 }
 
 /* board */
@@ -117,7 +117,7 @@ a {
     border-radius: $size;
     bottom: 0;
     right: 0;
-    animation: blink 1s infinite;
+    animation: blink-white 1s infinite;
     cursor: move;
     transition: .2s linear;
 
@@ -218,55 +218,40 @@ a {
   padding-top: 8px;
   margin-top: 10px;
   height: 30px;
-}
 
-.footer__author {
-  width: 40%;
-  margin-left: 20px;
-  color: #aaa;
-  font-size: 14px;
+  &__author {
+    width: 40%;
+    margin-left: 20px;
+    color: #aaa;
+    font-size: 14px;
 
-  a {
-    margin-left: 5px;
-    color: inherit;
-    font-size: inherit;
+    a {
+      margin-left: 5px;
+      color: inherit;
+      font-size: inherit;
+    }
   }
 }
 
 /* animation */
 
-@keyframes blink {
-  0% {
-    box-shadow: 0 0 0 0 rgba(white, .2);
-    transform: scale(1);
-  }
-  30% {
-    transform: scale(.85);
-  }
-  40% {
-    box-shadow: 0 0 .1em .3em rgba(white, .5);
-    transform: scale(1);
-  }
-  80% {
-    box-shadow: 0 0 .5em 1.2em rgba(white, 0);
-    transform: scale(1);
-  }
-}
-@keyframes blink-red {
-  0% {
-    box-shadow: 0 0 0 0 rgba(#e46e15, .2);
-    transform: scale(1);
-  }
-  30% {
-    transform: scale(.85);
-  }
-  40% {
-    box-shadow: 0 0 .1em .3em rgba(#e46e15, .5);
-    transform: scale(1);
-  }
-  80% {
-    box-shadow: 0 0 .5em 1.2em rgba(#e46e15, 0);
-    transform: scale(1);
+$blink-anims: (white: white, red: #e46e15);
+@each $name, $color in $blink-anims {
+  @keyframes blink-#{$name} {
+    0% {
+      box-shadow: 0 0 0 0 rgba($color, .2);
+      transform: scale(1);
+    }
+    30% {
+      transform: scale(.85);
+    }
+    40% {
+      box-shadow: 0 0 .1em .3em rgba($color, .5);
+      transform: scale(1);
+    }
+    80% {
+      box-shadow: 0 0 .5em 1.2em rgba($color, 0);
+      transform: scale(1);
+    }
   }
 }
-
