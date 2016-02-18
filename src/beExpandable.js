@@ -40,14 +40,24 @@ export default function beExpandable(Component) {
       );
     },
 
-    renderExpanders() {
+    getExpanders() {
       const { expander, expanders } = this.props;
-      if (expander) {
-        return [this.renderExpander(expander.props)];
-      }
+      return expander ? [expander] : expanders;
+    },
+
+    normalizeExpanders(expanders) {
       return expanders.map(expander => {
-        return this.renderExpander(expander.props);
+        if (typeof expander === 'function') {
+          return expander();
+        }
+        return expander;
       });
+    },
+
+    renderExpanders() {
+      const expanders = this.getExpanders();
+      return this.normalizeExpanders(expanders)
+        .map(expander => this.renderExpander(expander.props));
     },
 
     renderExpander(props = {}) {

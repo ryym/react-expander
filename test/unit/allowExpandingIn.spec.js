@@ -66,10 +66,7 @@ describe('allowExpandingIn', function() {
     it('has functions to communicate with allower', () => {
       const { allower } = renderAllower(Div);
       const expander = allower.makeExpander();
-      assert.deepEqual(
-        Object.keys(expander),
-        ['startResizing']
-      );
+      assert.equal(typeof expander().startResizing, 'function');
     });
 
     it('can take props for expander element as an argument', () => {

@@ -108,6 +108,18 @@ describe('beExpandable', function() {
     assert(_expander);
   });
 
+  context('when expander is a function', () => {
+    it('gets  expander from its return value', () => {
+      function expander() {
+        return { props: { className: 'expander' } };
+      }
+      const expandable = renderExpandable(Div, { expander });
+      const _expander = findWithClassName(expandable, 'expander');
+
+      assert(_expander);
+    });
+  });
+
   context('when expanders are set', () => {
     it('renders all expanders', () => {
       const make = props => makeExpander(

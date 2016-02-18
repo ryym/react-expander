@@ -29,12 +29,12 @@ export default function allowExpandingIn(ContainerComp) {
     },
 
     makeExpander() {
-      function expander(props) {
-        expander.props = Object.assign({}, props);
-        return expander;
-      }
-      expander.startResizing = this.startResizing;
-      return expander;
+      return props => {
+        return {
+          props,
+          startResizing: this.startResizing
+        };
+      };
     },
 
     startResizing(connector) {
