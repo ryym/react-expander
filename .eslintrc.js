@@ -20,7 +20,9 @@ module.exports = {
       "afterColon": true
     }],
     "linebreak-style": [2, "unix"],
-    "max-len": [2, 80, 4],
+    "max-len": [2, 80, 4, {
+      "ignoreUrls": true
+    }],
     "max-statements": [1, 20],
     "no-multi-spaces": 2,
     "no-new-wrappers": 2,
