@@ -1,0 +1,205 @@
+/* Sample SCSS */
+* {
+  box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; }
+
+body {
+  background-color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: stretch; }
+
+a {
+  text-decoration: none;
+  color: #e46e15; }
+  a:hover {
+    text-decoration: underline; }
+
+#main {
+  width: 90%;
+  height: 100%; }
+
+.sample-container {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 95%; }
+
+.sample-main {
+  flex-grow: 3; }
+
+/* header */
+.header {
+  border-bottom: 3px solid #bbb;
+  padding: 10px;
+  margin: 0;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center; }
+  .header__left {
+    flex-grow: 3;
+    margin-left: 30px; }
+  .header__right {
+    flex-grow: 1;
+    margin-right: 20px;
+    text-align: right; }
+  .header__title {
+    color: #dfdfdf;
+    font-size: 20px; }
+    .header__title .fa-fire {
+      margin-right: 10px;
+      color: #ef9f62; }
+  .header__source {
+    width: 100px;
+    color: #dfdfdf; }
+    .header__source:hover {
+      color: white;
+      text-decoration: none; }
+  .header__source__icon {
+    margin-right: 5px; }
+
+/* board */
+.board-frame {
+  border: 1px solid #aaa;
+  color: #fff;
+  padding: 5px;
+  margin: 10px;
+  position: relative;
+  border-radius: 3px;
+  box-shadow: 0 0 .5em .1em #eee;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; }
+  .board-frame .expander {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: #fff;
+    border-radius: 15px;
+    bottom: 0;
+    right: 0;
+    animation: blink-white 1s infinite;
+    cursor: move;
+    transition: .2s linear; }
+    .board-frame .expander:hover {
+      background-color: #e46e15;
+      animation: blink-red 1s infinite; }
+
+.board__content-bg {
+  width: 100%;
+  background-color: #475169;
+  padding: 10px;
+  border-radius: 10px; }
+
+.board__content {
+  min-width: 700px;
+  min-height: 350px;
+  height: 90%;
+  position: relative; }
+
+.board__description {
+  padding: 3px;
+  margin: 15px; }
+  .board__description h2 {
+    margin-top: 0; }
+  .board__description p {
+    line-height: 1.1em;
+    max-width: 450px; }
+
+.poster {
+  margin: 5px;
+  background-color: #a7bfd4;
+  width: 150px;
+  height: 150px;
+  padding: 1px 15px;
+  border-radius: 2px;
+  box-shadow: 0 0 .3em .1em #eee inset;
+  position: relative;
+  overflow: hidden;
+  position: absolute; }
+  .poster .poster-expander {
+    position: absolute;
+    width: 0;
+    height: 0;
+    cursor: move; }
+
+.poster-react {
+  margin-top: 25px; }
+  .poster-react .poster-expander {
+    right: 0;
+    bottom: 0;
+    border-right: 6px solid #475169;
+    border-bottom: 6px solid #475169;
+    border-left: 6px solid #698CB4;
+    border-top: 6px solid #698CB4; }
+
+.poster-example {
+  top: 10px;
+  right: 5px; }
+  .poster-example .poster-expander {
+    left: 0;
+    bottom: 0;
+    border-left: 6px solid #475169;
+    border-bottom: 6px solid #475169;
+    border-right: 6px solid #698CB4;
+    border-top: 6px solid #698CB4; }
+
+.poster-repository {
+  bottom: 30px;
+  right: 180px; }
+  .poster-repository .poster-expander {
+    left: 0;
+    top: 0;
+    border-left: 6px solid #475169;
+    border-top: 6px solid #475169;
+    border-right: 6px solid #698CB4;
+    border-bottom: 6px solid #698CB4; }
+
+/* footer */
+.footer {
+  border-top: 1px solid #888;
+  padding-top: 8px;
+  margin-top: 10px;
+  height: 30px; }
+  .footer__author {
+    width: 40%;
+    margin-left: 20px;
+    color: #aaa;
+    font-size: 14px; }
+    .footer__author a {
+      margin-left: 5px;
+      color: inherit;
+      font-size: inherit; }
+
+/* animation */
+@keyframes blink-white {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
+    transform: scale(1); }
+  30% {
+    transform: scale(0.85); }
+  40% {
+    box-shadow: 0 0 0.1em 0.3em rgba(255, 255, 255, 0.5);
+    transform: scale(1); }
+  80% {
+    box-shadow: 0 0 0.5em 1.2em rgba(255, 255, 255, 0);
+    transform: scale(1); } }
+
+@keyframes blink-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(228, 110, 21, 0.2);
+    transform: scale(1); }
+  30% {
+    transform: scale(0.85); }
+  40% {
+    box-shadow: 0 0 0.1em 0.3em rgba(228, 110, 21, 0.5);
+    transform: scale(1); }
+  80% {
+    box-shadow: 0 0 0.5em 1.2em rgba(228, 110, 21, 0);
+    transform: scale(1); } }
