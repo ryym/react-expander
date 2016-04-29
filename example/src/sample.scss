@@ -121,7 +121,7 @@ a {
     cursor: move;
     transition: .2s linear;
 
-    &:hover {
+    &:hover, &.re-expanding {
       background-color: #e46e15;
       animation: blink-red 1s infinite;
     }

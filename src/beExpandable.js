@@ -16,7 +16,7 @@ export default function beExpandable(Component) {
 
     getInitialState() {
       const { width, height } = this.props.size;
-      return { width, height };
+      return { width, height, isExpanding: false };
     },
 
     render() {
@@ -60,18 +60,23 @@ export default function beExpandable(Component) {
         .map(exp => this.renderExpander(exp.key, exp.props));
     },
 
-    renderExpander(key, props = {}) {
+    renderExpander(key, allProps = {}) {
+      const {
+        defaultStyle, className, expandTo, ...props
+      } = allProps;
+      const style = defaultStyle ? this.makeDefaultExpanderStyle() : [];
       const connector = this.makeConnector();
-      const style = props.defaultStyle ?
-        this.makeDefaultExpanderStyle() : [];
+      const stateClass = this.state.isExpanding ? 're-expanding' : '';
+
       return (
         <div
           draggable
           key={key}
           onMouseDown={
-            e => this.startResizing(e, props.expandTo, connector)
+            e => this.startResizing(e, expandTo, connector)
           }
           style={style}
+          className={(className || '') + ` ${stateClass}`}
           {...props}
         />
       );
@@ -102,12 +107,13 @@ export default function beExpandable(Component) {
 
     stopResizing() {
       this._measurer = undefined;
+      this.setState({ isExpanding: false });
     },
 
     expand(e) {
       const width = this._measurer.measureWidth(e.clientX);
       const height = this._measurer.measureHeight(e.clientY);
-      this.setState({ width, height });
+      this.setState({ width, height, isExpanding: true });
     },
 
     makeConnector() {

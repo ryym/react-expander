@@ -263,7 +263,11 @@ describe('beExpandable', function() {
       });
 
       const expectedArgs = points.map(([x, y]) => {
-        return [{ width: width + x, height: height + y }];
+        return [{
+          width: width + x,
+          height: height + y,
+          isExpanding: true
+        }];
       });
       assert.deepEqual(expandable.setState.args, expectedArgs);
     });
