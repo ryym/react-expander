@@ -191,25 +191,12 @@ describe('beExpandable', function() {
     });
   });
 
-  describe('connector', () => {
-    it('has functions that are necessary to handle expanding', () => {
-      const expandable = renderExpandable(Div, { expander: {} });
-      const connector = expandable.makeConnector();
-
-      assert.deepEqual(
-        Object.keys(connector),
-        ['expand', 'stopResizing']
-      );
-    });
-  });
-
   describe('#startResizing()', () => {
     it('stores starting state', () => {
       const size = { width: 100, height: 100 };
-      const expandable = renderExpandable(Div, {
-        size, expander: { startResizing: () => {} }
-      });
+      const expander = { startResizing: () => {} };
       const cursorPosition = { clientX: 10, clientY: 20 };
+      const expandable = renderExpandable(Div, { size, expander });
 
       expandable.startResizing(cursorPosition);
       assert(expandable.isExpanding());

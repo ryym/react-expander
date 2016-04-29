@@ -6,11 +6,14 @@ import {
 } from '$src/SizeMeasurer';
 
 describe('measures', () => {
-  function testEach(calculator, params) {
+  function testEach(measure, params) {
     forEach(params).it(
       param => `handles ${JSON.stringify(param)}`,
-      (args, out) => {
-        assert.equal(calculator(...args), out);
+      ([originalSize, cursorFrom, cursorTo], updatedSize) => {
+        assert.equal(
+          measure(originalSize, cursorFrom, cursorTo),
+          updatedSize
+        );
       }
     );
   }
