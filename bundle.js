@@ -19790,11 +19790,12 @@
 
 	'use strict';
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	exports.default = allowExpandingIn;
 
 	var _react = __webpack_require__(1);
@@ -19823,15 +19824,17 @@
 	    makeExpandHandlers: function makeExpandHandlers() {
 	      var _this = this;
 
-	      var onStopEvent = function onStopEvent(e) {
-	        return _this.stopResizing(e);
-	      };
 	      return {
-	        onMouseMove: function onMouseMove(e) {
-	          return _this.expand(e);
+	        onDragStart: function onDragStart(e) {
+	          e.dataTransfer.setData('text/plain', '');
 	        },
-	        onMouseUp: onStopEvent,
-	        onMouseLeave: onStopEvent
+	        onDragOver: function onDragOver(e) {
+	          e.dataTransfer.dropEffect = 'move';
+	          _this.expand(e);
+	        },
+	        onDragEnd: function onDragEnd(e) {
+	          _this.stopResizing(e);
+	        }
 	      };
 	    },
 	    makeExpander: function makeExpander() {
@@ -19871,11 +19874,12 @@
 
 	'use strict';
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	exports.default = beExpandable;
 
 	var _react = __webpack_require__(1);
@@ -19905,7 +19909,7 @@
 	      var width = _props$size.width;
 	      var height = _props$size.height;
 
-	      return { width: width, height: height };
+	      return { width: width, height: height, isExpanding: false };
 	    },
 	    render: function render() {
 	      var _props = this.props;
@@ -19955,16 +19959,25 @@
 	    renderExpander: function renderExpander(key) {
 	      var _this2 = this;
 
-	      var props = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	      var allProps = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	      var defaultStyle = allProps.defaultStyle;
+	      var className = allProps.className;
+	      var expandTo = allProps.expandTo;
 
+	      var props = _objectWithoutProperties(allProps, ['defaultStyle', 'className', 'expandTo']);
+
+	      var style = defaultStyle ? this.makeDefaultExpanderStyle() : [];
 	      var connector = this.makeConnector();
-	      var style = props.defaultStyle ? this.makeDefaultExpanderStyle() : [];
+	      var stateClass = this.state.isExpanding ? 're-expanding' : '';
+
 	      return _react2.default.createElement('div', _extends({
+	        draggable: true,
 	        key: key,
 	        onMouseDown: function onMouseDown(e) {
-	          return _this2.startResizing(e, props.expandTo, connector);
+	          return _this2.startResizing(e, expandTo, connector);
 	        },
-	        style: style
+	        style: style,
+	        className: (className || '') + (' ' + stateClass)
 	      }, props));
 	    },
 	    makeDefaultExpanderStyle: function makeDefaultExpanderStyle() {
@@ -19995,11 +20008,12 @@
 	    },
 	    stopResizing: function stopResizing() {
 	      this._measurer = undefined;
+	      this.setState({ isExpanding: false });
 	    },
 	    expand: function expand(e) {
 	      var width = this._measurer.measureWidth(e.clientX);
 	      var height = this._measurer.measureHeight(e.clientY);
-	      this.setState({ width: width, height: height });
+	      this.setState({ width: width, height: height, isExpanding: true });
 	    },
 	    makeConnector: function makeConnector() {
 	      return {
@@ -20019,13 +20033,14 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 	exports.normalizeDirections = normalizeDirections;
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20087,6 +20102,7 @@
 	 * of expanding.
 	 */
 
+
 	var measures = exports.measures = {
 	  top: function top(height, fromY, toY) {
 	    return height + fromY - toY;
@@ -20100,6 +20116,7 @@
 	  right: function right(width, fromX, toX) {
 	    return width + toX - fromX;
 	  },
+
 
 	  asIs: function asIs(size) {
 	    return size;
@@ -20128,6 +20145,7 @@
 
 	  var d1 = _dirs[0];
 	  var d2 = _dirs[1];
+
 
 	  if (isDirY(d1) && isDirY(d2) || isDirX(d1) && isDirX(d2)) {
 	    throw new Error('Invalid directions are specified.');

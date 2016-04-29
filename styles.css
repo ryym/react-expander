@@ -87,7 +87,7 @@ a {
     animation: blink-white 1s infinite;
     cursor: move;
     transition: .2s linear; }
-    .board-frame .expander:hover {
+    .board-frame .expander:hover, .board-frame .expander.re-expanding {
       background-color: #e46e15;
       animation: blink-red 1s infinite; }
 
