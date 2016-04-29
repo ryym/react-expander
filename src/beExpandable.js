@@ -66,6 +66,7 @@ export default function beExpandable(Component) {
         this.makeDefaultExpanderStyle() : [];
       return (
         <div
+          draggable
           key={key}
           onMouseDown={
             e => this.startResizing(e, props.expandTo, connector)

@@ -91,35 +91,24 @@ describe('allowExpandingIn', function() {
 
   describe('expandHandlers', () => {
     context('while resizing', () => {
-      describe('#onMouseMove()', () => {
+      describe('#onDragOver()', () => {
         it('calls this#expand()', () => {
           const { allower, container } = renderAllower(Div);
           const { expandHandlers } = container.props;
 
           allower.expand = sinon.spy();
-          expandHandlers.onMouseMove({});
+          expandHandlers.onDragOver({ dataTransfer: {} });
           assert(allower.expand.calledOnce);
         });
       });
 
-      describe('#onMouseUp()', () => {
+      describe('#onDragEnd()', () => {
         it('calls this#stopResizing()', () => {
           const { allower, container } = renderAllower(Div);
           const { expandHandlers } = container.props;
 
           allower.stopResizing = sinon.spy();
-          expandHandlers.onMouseUp({});
-          assert(allower.stopResizing.calledOnce);
-        });
-      });
-
-      describe('#onMouseLeave()', () => {
-        it('calls this#stopResizing()', () => {
-          const { allower, container } = renderAllower(Div);
-          const { expandHandlers } = container.props;
-
-          allower.stopResizing = sinon.spy();
-          expandHandlers.onMouseLeave({});
+          expandHandlers.onDragEnd({});
           assert(allower.stopResizing.calledOnce);
         });
       });

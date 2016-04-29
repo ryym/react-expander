@@ -22,11 +22,17 @@ export default function allowExpandingIn(ContainerComp) {
     },
 
     makeExpandHandlers() {
-      const onStopEvent = e => this.stopResizing(e);
       return {
-        onMouseMove: e => this.expand(e),
-        onMouseUp: onStopEvent,
-        onMouseLeave: onStopEvent
+        onDragStart: e => {
+          e.dataTransfer.setData('text/plain', '');
+        },
+        onDragOver: e => {
+          e.dataTransfer.dropEffect = 'move';
+          this.expand(e);
+        },
+        onDragEnd: e => {
+          this.stopResizing(e);
+        }
       };
     },
 
