@@ -9,13 +9,8 @@
   "license": "MIT",
   "devDependencies": {
     "babel-loader": "^6.2.2",
-    "css-loader": "^0.23.1",
-    "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.8.1",
-    "node-sass": "^3.4.2",
     "react-expander": "file:../..",
-    "sass-loader": "^3.1.2",
-    "style-loader": "^0.13.0",
     "webpack": "^1.12.12",
     "webpack-dev-server": "^1.14.1"
   }
