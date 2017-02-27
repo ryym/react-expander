@@ -8,8 +8,11 @@ import React from 'react';
  * @return {React.Component} The allower component.
  */
 export default function allowExpandingIn(ContainerComp) {
+  const componentName = ContainerComp.displayName || ContainerComp.name;
   return React.createClass({
     _expanderId: 0,
+
+    displayName: `AllowExpandingIn(${componentName})`,
 
     render() {
       return (

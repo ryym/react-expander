@@ -7,12 +7,15 @@ import { SizeMeasurer } from './SizeMeasurer';
  * @return {React.Component} The wrapped component.
  */
 export default function beExpandable(Component) {
+  const componentName = Component.displayName || Component.name;
   return React.createClass({
     getDefaultProps() {
       return {
         size: { width: 100, height: 100 }
       };
     },
+
+    displayName: `BeExpandable(${componentName})`,
 
     getInitialState() {
       const { width, height } = this.props.size;
