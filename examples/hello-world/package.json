@@ -1,0 +1,17 @@
+{
+  "name": "react-expander-example",
+  "description": "Example of react-expander",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack-dev-server"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "babel-loader": "^6.2.2",
+    "html-webpack-plugin": "^2.8.1",
+    "react-expander": "file:../..",
+    "webpack": "^1.12.12",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
