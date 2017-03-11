@@ -69,7 +69,7 @@ gulp.task('lint:gulp', () => {
 });
 
 gulp.task('lint:eg', () => {
-  lintFiles(`${$.PATH.eg}/src`, LINT_CONF.eg, true);
+  lintFiles(`${$.PATH.eg}/**/*.js`, LINT_CONF.eg, true);
 });
 
 gulp.task('lint:watch', () => {

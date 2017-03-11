@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 const path = require('path');
 const HtmlTemplatePlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');

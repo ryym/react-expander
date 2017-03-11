@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "dev": "webpack-dev-server"
+    "start": "webpack-dev-server"
   },
   "license": "MIT",
   "devDependencies": {
@@ -13,7 +13,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.8.1",
     "node-sass": "^3.4.2",
-    "react-expander": "file:..",
+    "react-expander": "file:../..",
     "sass-loader": "^3.1.2",
     "style-loader": "^0.13.0",
     "webpack": "^1.12.12",
